@@ -111,22 +111,90 @@ footer nav {
 table.profile {
 	width: 100%;
 	margin-bottom: 0;
-	}
+}
 
 td.main {
 	width: 70%;
 	padding: 1em;
-	}
+}
 
 td.sidebar {
 	width: 30%;
 	padding: 1em;
 	vertical-align: top;
 	background: #ffc;
-	}
+}
 
 .profile img.gravatar {
 	border: 5px solid #999;
 	margin-bottom: -15px;
-	}
+}
+
+	div.field, div.actions {
+	margin-bottom: 10px;
+}
+.myButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #e6e1e6;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #e6e1e6;
+	box-shadow:inset 0px 1px 0px 0px #e6e1e6;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b8b8b8), color-stop(1, #b8b8b8) );
+	background:-moz-linear-gradient( center top, #b8b8b8 5%, #b8b8b8 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#b8b8b8', endColorstr='#b8b8b8');
+	background-color:#b8b8b8;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #d4d4d4;
+	display:inline-block;
+	color:#2e5459;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #968b96;
+}.myButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b8b8b8), color-stop(1, #b8b8b8) );
+	background:-moz-linear-gradient( center top, #b8b8b8 5%, #b8b8b8 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#b8b8b8', endColorstr='#b8b8b8');
+	background-color:#b8b8b8;
+}.myButton:active {
+	position:relative;
+	top:1px;
+}
+.field_with_errors {
+	margin-top: 10px;
+	padding: 2px;
+	background-color: red;
+	display: table;
+}
+	.field_with_errors label {
+	color: #fff;
+}
+#error_explanation {
+	width: 400px;
+	border: 2px solid red;
+	padding: 7px;
+	padding-bottom: 12px;
+	margin-bottom: 20px;
+	background-color: #f0f0f0;
+}
+#error_explanation h2 {
+	text-align: left;
+	font-weight: bold;
+	padding: 5px 5px 5px 15px;
+	font-size: 12px;
+	margin: -7px;
+	background-color: #c00;
+	color: #fff;
+}
+#error_explanation p {
+	color: #333;
+	margin-bottom: 0;
+	padding: 5px;
+}
+#error_explanation ul li {
+	font-size: 12px;
+	list-style: square;
+}
 
