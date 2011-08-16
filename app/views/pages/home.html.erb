@@ -4,6 +4,11 @@
   <a href="http://railstutorial.org/">Ruby on Rails Tutorial</a>
   sample application.
 </p>
-
+<% if logged_in? %>
+<p>
+  Welcome <b><%= current_user.name %></b> to this website!
+</p>
+<% else %>
 <%= link_to "Register now!", register_path, :class => "register_button round" %>
+<% end %>
 
