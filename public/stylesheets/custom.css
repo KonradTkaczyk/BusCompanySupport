@@ -122,7 +122,7 @@ td.sidebar {
 	width: 30%;
 	padding: 1em;
 	vertical-align: top;
-	background: #ffc;
+	background: #fdc;
 }
 
 .profile img.gravatar {
@@ -196,5 +196,12 @@ td.sidebar {
 #error_explanation ul li {
 	font-size: 12px;
 	list-style: square;
+}
+ul.users {
+	margin-top: 1em;
+}
+
+.users li {
+	list-style:none;
 }
 

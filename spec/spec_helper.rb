@@ -27,5 +27,12 @@ RSpec.configure do |config|
   def test_log_in(user)
     controller.log_in(user)
   end
+
+  def integration_log_in(user)
+    visit log_in_path
+    fill_in :email, :with => user.email
+    fill_in :password, :with => user.password
+    click_button
+  end
 end
 

@@ -41,21 +41,16 @@ describe "Users" do
 
     describe "failure" do
       it "should not log a user in" do
-        visit log_in_path
-        fill_in :email, :with => ""
-        fill_in :password, :with => ""
-        click_button
+        user = Factory(:user)
+        user.password = "invalid" #invalid password addedd to simulate typing wrong password
+        integration_log_in(user)
         response.should have_selector("div.flash.error", :content => "Invalid")
       end
     end
 
     describe "Success" do
       it "should log a user in and out" do
-        user = Factory(:user)
-        visit log_in_path
-        fill_in :email, :with => user.email
-        fill_in :password, :with => user.password
-        click_button
+        integration_log_in(Factory(:user))
         controller.should be_logged_in
         click_link "Log out"
         controller.should_not be_logged_in
