@@ -1,17 +1,27 @@
 class UsersController < ApplicationController
-  before_filter :authenticate, :only => [:index, :edit, :update]
+  before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
   before_filter :correct_user, :only => [:edit, :update]
   before_filter :admin_user,   :only => [:destroy]
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
-    redirect_to users_path
+
+    if User.find(params[:id])==current_user && current_user.admin?
+      flash[:error] = "You cannot delete yourself"
+      redirect_to users_path
+    else
+      User.find(params[:id]).destroy
+      flash[:success] = "User destroyed."
+      redirect_to users_path
+    end
   end
 
   def new
-    @user = User.new
-    @title = "Register"
+    if current_user != nil
+      redirect_to(root_path)
+    else
+      @user = User.new
+      @title = "Register"
+    end
   end
 
   def index
@@ -25,16 +35,20 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
-    if @user.save
-      log_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+    if current_user != nil
+      redirect_to(root_path)
     else
-      @title = "Register"
-      @user.password.clear
-      @user.password_confirmation.clear
-      render 'new'
+      @user = User.new(params[:user])
+      if @user.save
+        log_in @user
+        flash[:success] = "Welcome to the Sample App!"
+        redirect_to @user
+      else
+        @title = "Register"
+        @user.password.clear
+        @user.password_confirmation.clear
+        render 'new'
+      end
     end
   end
 
@@ -54,10 +68,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-    def authenticate
-      deny_access unless logged_in?
-    end
 
     def correct_user
       @user = User.find(params[:id])

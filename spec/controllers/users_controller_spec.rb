@@ -9,7 +9,7 @@ describe UsersController do
       @user = Factory(:user)
     end
 
-    describe "asd a non-logged-in user" do
+    describe "as a non-logged-in user" do
       it "should deny access" do
         delete :destroy, :id => @user
         response.should redirect_to(log_in_path)
@@ -27,8 +27,8 @@ describe UsersController do
     describe "as an admin user" do
 
       before(:each) do
-        admin = Factory(:user, :email => "admin@example.com", :admin =>true)
-        test_log_in(admin)
+        @admin = Factory(:user, :email => "admin@example.com", :admin =>true)
+        test_log_in(@admin)
       end
 
       it "should destroy the user" do
@@ -40,6 +40,13 @@ describe UsersController do
       it "should redirect to the users page" do
         delete :destroy, :id => @user
         response.should redirect_to(users_path)
+      end
+
+      it "should not delete myself if I am admin user" do
+        lambda do
+          delete :destroy, :id => @admin
+          response.should redirect_to(users_path)
+        end.should_not change(User, :count)
       end
     end
   end
@@ -96,6 +103,22 @@ describe UsersController do
         response.should have_selector("span.disabled", :content => "Previous")
         response.should have_selector("a", :href => "/users?page=2", :content => "2")
         response.should have_selector("a", :href => "/users?page=2", :content => "Next")
+      end
+
+      it "should not have any delete links" do
+        get :index
+        response.should_not have_selector("a", :content => "delete")
+      end
+
+      describe "for admin logged in" do
+        before(:each)do
+          test_log_in(Factory(:user, :admin => true, :email => Factory.next(:email)))
+        end
+
+        it "should allow to see delete link by admin user" do
+          get :index
+          response.should have_selector("a[title='Delete #{@user.name}']")
+        end
       end
     end
   end

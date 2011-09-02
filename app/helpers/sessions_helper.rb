@@ -18,7 +18,7 @@ module SessionsHelper
   end
 
   def log_out
-    session[:remember_token] = nil # removing from session
+    reset_session # removing from session
     current_user = nil
   end
 
@@ -37,6 +37,10 @@ module SessionsHelper
   end
 
   private
+
+    def authenticate
+      deny_access unless logged_in?
+    end
 
     def user_from_remember_token
       User.authenticate_with_salt(*remember_token)
