@@ -3,14 +3,28 @@
   <%= f.label :name %><br/>
   <%= f.text_field :name %>
 </div>
+
+<div class="field">
+  <%= f.label :surname %><br/>
+  <%= f.text_field :surname %>
+</div>
+
+<div class="field">
+<%= f.select :birthday, (1..31).to_a%>
+<%= f.select :birthday, (1..12).to_a %>
+<%= f.select :birthday, ((Time.now.year - 20)..Time.now.year).to_a%> <br/>
+</div>
+
 <div class="field">
   <%= f.label :email %> <br />
   <%= f.text_field :email %>
 </div>
+
 <div class="field">
   <%= f.label :password%> <br />
   <%= f.password_field :password %>
 </div>
+
 <div class="field">
   <%= f.label :password_confirmation, "Password Confirmation" %><br/>
   <%= f.password_field :password_confirmation %>

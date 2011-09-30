@@ -1,5 +1,3 @@
-require 'faker'
-
 namespace :db do
   desc "Dill database with sample data"
   task :populate => :environment do
