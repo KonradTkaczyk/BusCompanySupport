@@ -10,9 +10,15 @@
 </div>
 
 <div class="field">
-<%= f.select :birthday, (1..31).to_a%>
-<%= f.select :birthday, (1..12).to_a %>
-<%= f.select :birthday, ((Time.now.year - 20)..Time.now.year).to_a%> <br/>
+<%= f.label :birthday %> <br/>
+<%= f.date_select(:birthday, :default => Time.now - 18.years ,:start_year => Time.now.year - 150, :end_year => Time.now.year)%>
+</div>
+
+<div class="field">
+  <%= f.radio_button(:gender, false) %>
+  <%= f.label(:gender, "Woman") %>
+  <%= f.radio_button(:gender, true) %>
+  <%= f.label(:gender, "Man") %>
 </div>
 
 <div class="field">
