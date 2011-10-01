@@ -1,5 +1,3 @@
-# Ruby on Rails Tutorial: sample application
-This is the sample application for
-[*Ruby on Rails Tutorial: Learn Rails by Example*](http://railstutorial.org/)
-by [Michael Hartl](http://michaelhartl.com/).
+# Ruby on Rails BusCompanySupport application
+This is applicaton which will support small bus company. This is bachelor thesis at Warsaw University of Technology
 
