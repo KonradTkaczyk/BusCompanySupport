@@ -1,9 +1,11 @@
 
 class User < ActiveRecord::Base
   attr_accessor :password
-  attr_accessible :name, :email, :password, :password_confirmation, :surname, :birthday, :gender
+  attr_accessible :name, :email, :password, :password_confirmation, :surname,
+                  :birthday, :gender, :address, :city, :postalcode
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  postal_regex = /\d\d-\d\d\d/
 
   validates :name,      :presence   => true,
                         :length     => { :maximum => 50 }
@@ -12,12 +14,15 @@ class User < ActiveRecord::Base
                         :format     => { :with => email_regex },
                         :uniqueness => { :case_sensitive => false }
 
-  validates :password,  :presence => true,
+  validates :password,  :presence   => true,
                         :confirmation => true,
                         :length      => {:within => 6..40}
 
-  validates :surname,   :presence => true,
-                        :length   => { :maximum => 50 }
+  validates :surname,   :presence   => true,
+                        :length     => { :maximum => 50 }
+
+  validates :postalcode,:length     => { :is => 6 },
+                        :format     => { :with => postal_regex, :message => "should be in format xx-xxx, where x is digit"}
 
   before_save :encrypt_password
 
