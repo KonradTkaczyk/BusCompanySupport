@@ -3,7 +3,7 @@
 }
 
 body {
-	background: #cff;
+	background: #306EFF;
 }
 
 header {
@@ -12,14 +12,14 @@ header {
 
 header img {
 	padding: 1em;
-	background: #fff;
+	background: #BDEDFF;
 }
 
 section {
 	margin-top: 1em;
 	font-size: 120%;
 	padding: 20px;
-	background: #fff;
+	background: #BDEDFF;
 }
 
 section h1 {
@@ -47,7 +47,7 @@ nav {
 }
 
 nav {
-	background-color: white;
+	background-color: #BDEDFF;
 	padding: 0 0.7em;
 	white-space: nowrap;
 }
@@ -83,7 +83,7 @@ a.register_button {
 	text-align: center;
 	width: 190px;
 	color: #fff;
-	background: #006400;
+	background: #153E7E;
 	font-size: 150%;
 	font-weight: bold;
 	padding: 20px;
@@ -122,7 +122,7 @@ td.sidebar {
 	width: 30%;
 	padding: 1em;
 	vertical-align: top;
-	background: #fdc;
+	background: #aaa;
 }
 
 .profile img.gravatar {

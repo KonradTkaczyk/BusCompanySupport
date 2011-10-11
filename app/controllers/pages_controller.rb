@@ -15,5 +15,9 @@ class PagesController < ApplicationController
     @title = "Help"
   end
 
+  def javascript
+    @title = "Javascript - test page"
+  end
+
 end
 
