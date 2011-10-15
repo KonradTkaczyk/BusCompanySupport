@@ -1,5 +1,11 @@
 BusCompanySupport::Application.routes.draw do
 
+  resources :seats
+
+  resources :buses
+
+  resources :tickets
+
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
 
