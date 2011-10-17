@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation, :surname,
                   :birthday, :gender, :address, :city, :postalcode
 
+  has_many :tickets
+
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   postal_regex = /\d\d-\d\d\d/
 
@@ -65,6 +67,7 @@ class User < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -80,5 +83,8 @@ end
 #  surname            :string(255)
 #  birthday           :date
 #  gender             :boolean
+#  address            :string(255)
+#  city               :string(255)
+#  postalcode         :string(255)
 #
 

@@ -168,6 +168,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -183,5 +184,8 @@ end
 #  surname            :string(255)
 #  birthday           :date
 #  gender             :boolean
+#  address            :string(255)
+#  city               :string(255)
+#  postalcode         :string(255)
 #
 
