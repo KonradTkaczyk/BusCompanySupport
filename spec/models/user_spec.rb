@@ -5,6 +5,8 @@ describe User do
   before(:each) do
     @attr = { :name   => "Example User",
               :email  => "user@example.com",
+              :surname => "Example",
+              :postalcode => "99-999",
               :password => "fuuuuu",
               :password_confirmation => "fuuuuu"}
   end
@@ -16,6 +18,11 @@ describe User do
   it "should require a name" do
     no_name_user = User.new(@attr.merge(:name => ""))
     no_name_user.should_not be_valid
+  end
+
+  it "should require a surname" do
+    no_surname_user = User.new(@attr.merge(:surname => ""))
+    no_surname_user.should_not be_valid
   end
 
   it "should require an email" do
@@ -42,6 +49,20 @@ describe User do
     addresses.each do |address|
       invalid_email_user = User.new(@attr.merge(:email => address))
       invalid_email_user.should_not be_valid
+    end
+  end
+
+  it "should accept valid postalcode" do
+    postal = "99-999"
+    valid_postalcode_user = User.new(@attr.merge(:postalcode => postal))
+    valid_postalcode_user.should be_valid
+  end
+
+  it "should reject invalid postalcode" do
+    postal = %w[44444 111-11 aaaaaa aa-aaa]
+    postal.each do |postalcd|
+      invalid_postalcode_user = User.new(@attr.merge(:postalcode => postalcd))
+      invalid_postalcode_user.should_not be_valid
     end
   end
 

@@ -10,7 +10,9 @@ describe "Users" do
         lambda do
           visit register_path
           fill_in "Name", :with => ""
+          fill_in "Surname", :with => ""
           fill_in "Email", :with => ""
+          fill_in "Postal Code", :with => ""
           fill_in "Password", :with => ""
           fill_in "Password confirmation", :with => ""
           click_button
@@ -25,7 +27,9 @@ describe "Users" do
         lambda do
           visit register_path
           fill_in "Name", :with => "Example User"
+          fill_in "Surname", :with => "Example"
           fill_in "Email", :with => "user@example.com"
+          fill_in "Postal Code", :with => "99-999"
           fill_in "Password", :with => "foobar"
           fill_in "Password confirmation", :with => "foobar"
           click_button
