@@ -1,8 +1,6 @@
-<h1>Bus Company Support</h1>
-<p>
-  Welcome to Bus Company Support. On this page You will be able to reserve a ticket, watch history of your travel.
-</p>
-<p>
-  Welcome <b><%= current_user.name %></b> to this website!
-</p>
+<% if current_user.admin? %>
+  <%= render 'pages/admin' %>
+<% else %>
+  <%= render 'pages/customer' %>
+<% end %>
 
