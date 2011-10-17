@@ -1,12 +1,6 @@
-<h1>Bus Company Support</h1>
-<p>
-  Welcome to Bus Company Support. On this page You will be able to reserve a ticket, watch history of your travel.
-</p>
 <% if logged_in? %>
-<p>
-  Welcome <b><%= current_user.name %></b> to this website!
-</p>
+  <%= render 'pages/logged_in' %>
 <% else %>
-<%= link_to "Register now!", register_path, :class => "register_button round" %>
+  <%= render 'pages/not_logged_in'%>
 <% end %>
 
