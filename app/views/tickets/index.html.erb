@@ -2,9 +2,9 @@
 
 <table>
   <tr>
-    <th> nameoftrip</th>
-    <th>Dateoftrip</th>
-    <th>Timeoftrip</th>
+    <th>Name of Trip</th>
+    <th>Date of Trip</th>
+    <th>Time of Trip</th>
     <th></th>
     <th></th>
     <th></th>
@@ -12,12 +12,13 @@
 
 <% @tickets.each do |ticket| %>
   <tr>
-    <td><%= ticket. nameOfTrip %></td>
+    <td><%= ticket.nameOfTrip %></td>
     <td><%= ticket.dateOfTrip %></td>
     <td><%= ticket.timeOfTrip %></td>
     <td><%= link_to 'Show', ticket %></td>
     <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
     <td><%= link_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Reserve', reserve_ticket_path(ticket), :confirm => 'Are you sure, u want to reserve this ticket?', :method => :reserve %></td>
   </tr>
 <% end %>
 </table>
@@ -25,3 +26,4 @@
 <br />
 
 <%= link_to 'New Ticket', new_ticket_path %>
+

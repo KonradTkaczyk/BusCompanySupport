@@ -1,20 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b> nameoftrip:</b>
-  <%= @ticket. nameOfTrip %>
+  <b> Name of trip:</b>
+  <%= @ticket.nameOfTrip %>
 </p>
 
 <p>
-  <b>Dateoftrip:</b>
+  <b>Date of trip:</b>
   <%= @ticket.dateOfTrip %>
 </p>
 
 <p>
-  <b>Timeoftrip:</b>
+  <b>Time of trip:</b>
   <%= @ticket.timeOfTrip %>
 </p>
 
 
 <%= link_to 'Edit', edit_ticket_path(@ticket) %> |
 <%= link_to 'Back', tickets_path %>
+

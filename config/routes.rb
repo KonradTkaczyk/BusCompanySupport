@@ -4,7 +4,11 @@ BusCompanySupport::Application.routes.draw do
 
   resources :buses
 
-  resources :tickets
+  resources :tickets do
+    member do
+      post 'reserve'
+    end
+  end
 
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]

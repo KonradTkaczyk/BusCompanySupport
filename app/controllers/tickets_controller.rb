@@ -1,4 +1,6 @@
 class TicketsController < ApplicationController
+   before_filter :authenticate
+   before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
   # GET /tickets
   # GET /tickets.xml
   def index
@@ -21,6 +23,17 @@ class TicketsController < ApplicationController
     end
   end
 
+  def reserve
+    @ticket = Ticket.find(params[:id])
+    @ticket.user_reserved_id = current_user.id
+    @ticket.save
+
+    respond_to do |format|
+      format.html { redirect_to(tickets_url) }
+      format.xml  { head :ok }
+    end
+  end
+
   # GET /tickets/new
   # GET /tickets/new.xml
   def new
@@ -40,7 +53,7 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.xml
   def create
-    @ticket = Ticket.new(params[:ticket])
+    @ticket = current_user.tickets.build(params[:ticket])
 
     respond_to do |format|
       if @ticket.save
@@ -80,5 +93,11 @@ class TicketsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+
+    def admin_user
+      redirect_to(root_path) unless current_user.admin?
+    end
 end
 
