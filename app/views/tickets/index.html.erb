@@ -18,7 +18,7 @@
     <td><%= link_to 'Show', ticket %></td>
     <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
     <td><%= link_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
-    <td><%= link_to 'Reserve', reserve_ticket_path(ticket), :confirm => 'Are you sure, u want to reserve this ticket?'%></td>
+    <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
   </tr>
 <% end %>
 </table>

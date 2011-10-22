@@ -6,7 +6,7 @@ BusCompanySupport::Application.routes.draw do
 
   resources :tickets do
     member do
-      get 'reserve'
+      put 'reserve'
     end
   end
 
