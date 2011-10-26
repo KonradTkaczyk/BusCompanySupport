@@ -15,15 +15,18 @@
     <td><%= ticket.nameOfTrip %></td>
     <td><%= ticket.dateOfTrip %></td>
     <td><%= ticket.timeOfTrip.strftime("%H:%M") %></td>
-    <td><%= link_to 'Show', ticket %></td>
-    <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
-    <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if current_user.admin? %>
+      <td><%= link_to 'Show', ticket %></td>
+      <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
+      <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
     <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
   </tr>
 <% end %>
 </table>
 
 <br />
-
-<%= link_to 'New Ticket', new_ticket_path %>
+<% if current_user.admin? %>
+  <%= link_to 'New Ticket', new_ticket_path %>
+<% end %>
 
