@@ -7,6 +7,7 @@ BusCompanySupport::Application.routes.draw do
   resources :tickets do
     member do
       put 'reserve'
+      put 'unreserve'
     end
   end
 
