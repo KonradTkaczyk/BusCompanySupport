@@ -34,6 +34,17 @@ class TicketsController < ApplicationController
     end
   end
 
+  def unreserve
+    @ticket = Ticket.find(params[:id])
+    @ticket.user_reserved_id = nil
+    @ticket.save
+
+    respond_to do |format|
+      format.html { redirect_to(tickets_url) }
+      format.xml  { head :ok }
+    end
+  end
+
   # GET /tickets/new
   # GET /tickets/new.xml
   def new
