@@ -1,6 +1,6 @@
 class Ticket < ActiveRecord::Base
   attr_accessible :nameOfTrip, :dateOfTrip, :timeOfTrip, :user_reserved_id
-
+  has_one :seat
   belongs_to :user
 end
 
