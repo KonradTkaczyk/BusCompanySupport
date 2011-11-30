@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111020193435) do
+ActiveRecord::Schema.define(:version => 20111130222617) do
 
   create_table "buses", :force => true do |t|
     t.string   "nameOfBus"
@@ -23,7 +23,10 @@ ActiveRecord::Schema.define(:version => 20111020193435) do
     t.string   "nameOfSeat"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ticket_id"
   end
+
+  add_index "seats", ["ticket_id"], :name => "index_seats_on_ticket_id"
 
   create_table "tickets", :force => true do |t|
     t.string   "nameOfTrip"
