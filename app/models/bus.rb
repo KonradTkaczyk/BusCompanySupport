@@ -1,4 +1,5 @@
 class Bus < ActiveRecord::Base
+  has_many :seats
 end
 
 # == Schema Information
