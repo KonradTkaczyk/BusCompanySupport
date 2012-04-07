@@ -22,4 +22,7 @@
 
 <br />
 
-<%= link_to 'New Bus', new_bus_path %>
+<% if current_user.admin? %>
+  <%= link_to 'New Bus', new_bus_path %>
+<% end %>
+

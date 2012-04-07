@@ -23,7 +23,7 @@
     <% if ticket.user_reserved_id == nil %>
     <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
     <% else %>
-    <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
+    <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
     <% end %>
   </tr>
 <% end %>

@@ -1,7 +1,7 @@
 class Ticket < ActiveRecord::Base
   attr_accessible :nameOfTrip, :dateOfTrip, :timeOfTrip, :user_reserved_id
-  has_one :seat
   belongs_to :user
+  has_one :bus
 end
 #user_id - is used to recognize person who created a ticket
 #user_reserved_id - is used to recognize a person who reserved a ticket
