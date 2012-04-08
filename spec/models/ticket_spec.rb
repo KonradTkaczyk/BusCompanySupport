@@ -28,6 +28,7 @@ describe Ticket do
 end
 
 
+
 # == Schema Information
 #
 # Table name: tickets
@@ -40,5 +41,7 @@ end
 #  updated_at       :datetime
 #  user_id          :integer
 #  user_reserved_id :integer
+#  nameOfSeat       :string(255)
+#  bus_id           :integer
 #
 

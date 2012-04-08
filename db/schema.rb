@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(:version => 20120405220249) do
     t.string   "address"
     t.string   "city"
     t.string   "postalcode"
-    t.boolean  "driver",             :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

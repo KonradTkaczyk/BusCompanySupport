@@ -15,6 +15,11 @@
   <%= @ticket.timeOfTrip.strftime("%H:%M") %>
 </p>
 
+<p>
+  <b>Bus:</b>
+  <%= link_to Bus.find(@ticket.bus_id).nameOfBus, bus_path(Bus.find(@ticket.bus_id)) %>
+</p>
+
 
 <%= link_to 'Edit', edit_ticket_path(@ticket) %> |
 <%= link_to 'Back', tickets_path %>

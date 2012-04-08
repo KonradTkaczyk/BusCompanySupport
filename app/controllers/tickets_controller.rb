@@ -49,7 +49,7 @@ class TicketsController < ApplicationController
   # GET /tickets/new.xml
   def new
     @ticket = Ticket.new
-
+    @Buses = Bus.all
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @ticket }
