@@ -2,6 +2,10 @@ class Ticket < ActiveRecord::Base
   attr_accessible :nameOfTrip, :dateOfTrip, :timeOfTrip, :user_reserved_id, :bus_id
   belongs_to :user
   belongs_to :bus
+
+  validates :nameOfTrip,      :presence   => true,
+                              :length     => { :maximum => 50 }
+
 end
 #user_id - is used to recognize person who created a ticket
 #user_reserved_id - is used to recognize a person who reserved a ticket

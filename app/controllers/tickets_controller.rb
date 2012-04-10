@@ -50,9 +50,14 @@ class TicketsController < ApplicationController
   def new
     @ticket = Ticket.new
     @Buses = Bus.all
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @ticket }
+    if @Buses.count == 0
+      flash[:error] = "You cannot create a ticket without a bus!"
+      redirect_to buses_path
+    else
+      respond_to do |format|
+        format.html # new.html.erb
+        format.xml  { render :xml => @ticket }
+      end
     end
   end
 
