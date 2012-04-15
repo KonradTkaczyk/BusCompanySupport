@@ -2,9 +2,7 @@
 
 <table>
   <tr>
-    <th>Name of Trip</th>
     <th>Date of Trip</th>
-    <th>Time of Trip</th>
     <th>Bus</th>
     <th></th>
     <th></th>
@@ -13,9 +11,7 @@
 
 <% @tickets.each do |ticket| %>
   <tr>
-    <td><%= ticket.nameOfTrip %></td>
-    <td><%= ticket.dateOfTrip %></td>
-    <td><%= ticket.timeOfTrip.strftime("%H:%M") %></td>
+    <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <% if ticket.bus_id != nil %>
     <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
     <% end %>

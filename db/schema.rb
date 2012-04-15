@@ -10,25 +10,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120405220249) do
+ActiveRecord::Schema.define(:version => 20120415222510) do
 
   create_table "buses", :force => true do |t|
     t.string   "nameOfBus"
-    t.string   "travel"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "capacity"
   end
 
   create_table "tickets", :force => true do |t|
-    t.string   "nameOfTrip"
-    t.date     "dateOfTrip"
-    t.time     "timeOfTrip"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "user_reserved_id"
     t.string   "nameOfSeat"
     t.integer  "bus_id"
+    t.datetime "dateOfTrip"
+    t.string   "from"
+    t.string   "to"
   end
 
   add_index "tickets", ["user_id"], :name => "index_tickets_on_user_id"
