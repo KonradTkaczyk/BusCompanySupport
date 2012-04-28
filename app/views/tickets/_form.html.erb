@@ -19,10 +19,23 @@
     <%= f.label :dateOfTrip, "Time of Trip" %><br />
     <%= f.time_select :dateOfTrip %>
   </div>
+
+  <div class="field">
+    <%= f.label :to, "To" %> <br />
+    <%= f.text_field :to %>
+  </div>
+
+  <div class="field">
+    <%= f.label :from, "From" %> <br />
+    <%= f.text_field :from %>
+  </div>
+
   <div class="field">
     <%= f.label :bus_id, "Name of the bus" %><br />
     <%= collection_select :ticket, :bus_id ,@Buses,:id,:nameOfBus %>
   </div>
+
+
   <div class="actions">
     <%= f.submit %>
   </div>

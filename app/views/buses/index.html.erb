@@ -20,7 +20,10 @@
 
 <br />
 
-<% if current_user.admin? %>
-  <%= link_to 'New Bus', new_bus_path %>
-<% end %>
+<table>
+  <th><% if current_user.admin? %>
+    <%= link_to 'New Bus', new_bus_path %>
+  <% end %></th>
+  <th><%= link_to 'Back', root_path %></th>
+</table>
 
