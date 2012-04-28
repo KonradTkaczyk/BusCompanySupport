@@ -3,8 +3,9 @@ class TicketsController < ApplicationController
    before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
   # GET /tickets
   # GET /tickets.xml
+
   def index
-    @tickets = Ticket.all
+    @tickets = Ticket.where(:user_reserved_id => 0)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -35,13 +36,17 @@ class TicketsController < ApplicationController
   end
 
   def unreserve
-    @ticket = Ticket.find(params[:id])
-    @ticket.user_reserved_id = nil
-    @ticket.save
-
-    respond_to do |format|
-      format.html { redirect_to(tickets_url) }
-      format.xml  { head :ok }
+    if @ticket.user_reserved_id != current_user.id
+      flash[:error] = "You cannot unreserve a ticket which you did not reserve!"
+      redirect_to tickets_path
+    else
+      @ticket = Ticket.find(params[:id])
+      @ticket.user_reserved_id = nil
+      @ticket.save
+      respond_to do |format|
+        format.html { redirect_to(tickets_url) }
+        format.xml  { head :ok }
+      end
     end
   end
 
