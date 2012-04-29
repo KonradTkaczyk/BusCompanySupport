@@ -6,6 +6,7 @@ BusCompanySupport::Application.routes.draw do
 
   resources :tickets do
     member do
+      put 'reserved_index'
       put 'reserve'
       put 'unreserve'
     end

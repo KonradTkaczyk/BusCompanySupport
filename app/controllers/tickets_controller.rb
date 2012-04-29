@@ -1,9 +1,17 @@
 class TicketsController < ApplicationController
    before_filter :authenticate
    before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
+
+  def reserved_index
+    @tickets = Ticket.where(:user_reserved_id => current_user.id)
+    respond_to do |format|
+      format.html # reserved_index.html.erb
+      format.xml  { render :xml => @tickets }
+    end
+  end
+
   # GET /tickets
   # GET /tickets.xml
-
   def index
     @tickets = Ticket.where(:user_reserved_id => 0)
 
