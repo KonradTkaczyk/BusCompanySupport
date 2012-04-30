@@ -41,7 +41,7 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
       if @user.save
         log_in @user
-        flash[:success] = "Welcome to the Sample App!"
+        flash[:success] = "Welcome to the BusCompanySupport!"
         redirect_to @user
       else
         @title = "Register"

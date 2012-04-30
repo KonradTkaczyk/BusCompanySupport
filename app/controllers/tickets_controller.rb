@@ -44,12 +44,12 @@ class TicketsController < ApplicationController
   end
 
   def unreserve
+    @ticket = Ticket.find(params[:id])
     if @ticket.user_reserved_id != current_user.id
       flash[:error] = "You cannot unreserve a ticket which you did not reserve!"
       redirect_to tickets_path
     else
-      @ticket = Ticket.find(params[:id])
-      @ticket.user_reserved_id = nil
+      @ticket.user_reserved_id = 0
       @ticket.save
       respond_to do |format|
         format.html { redirect_to(tickets_url) }
