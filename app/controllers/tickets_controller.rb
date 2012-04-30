@@ -36,9 +36,8 @@ class TicketsController < ApplicationController
     @ticket = Ticket.find(params[:id])
     @ticket.user_reserved_id = current_user.id
     @ticket.save
-
     respond_to do |format|
-      format.html { redirect_to(tickets_url) }
+      format.html { redirect_to(reserved_index_ticket_path) }
       format.xml  { head :ok }
     end
   end
