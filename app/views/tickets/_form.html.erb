@@ -12,12 +12,8 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :dateOfTrip, "Date of Trip" %><br />
-    <%= f.date_select :dateOfTrip %>
-  </div>
-  <div class="field">
-    <%= f.label :dateOfTrip, "Time of Trip" %><br />
-    <%= f.time_select :dateOfTrip %>
+    <%= f.label :dateOfTrip, "Date and time of Trip" %><br />
+    <%= f.datetime_select :dateOfTrip %>
   </div>
 
   <div class="field">
