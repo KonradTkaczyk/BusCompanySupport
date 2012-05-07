@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Name of bus</th>
+    <th>Capacity</th>
     <th></th>
     <th></th>
     <th></th>
@@ -11,6 +12,7 @@
 <% @buses.each do |bus| %>
   <tr>
     <td><%= bus.nameOfBus %></td>
+    <td><%= bus.capacity %></td>
     <td><%= link_to 'Show', bus %></td>
     <td><%= link_to 'Edit', edit_bus_path(bus) %></td>
     <td><%= link_to 'Destroy', bus, :confirm => 'Are you sure?', :method => :delete %></td>

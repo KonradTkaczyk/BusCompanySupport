@@ -74,6 +74,7 @@ class TicketsController < ApplicationController
 
   # GET /tickets/1/edit
   def edit
+    @Buses = Bus.all
     @ticket = Ticket.find(params[:id])
   end
 
@@ -81,14 +82,19 @@ class TicketsController < ApplicationController
   # POST /tickets.xml
   def create
     @ticket = current_user.tickets.build(params[:ticket])
-
-    respond_to do |format|
-      if @ticket.save
-        format.html { redirect_to(@ticket, :notice => 'Ticket was successfully created.') }
-        format.xml  { render :xml => @ticket, :status => :created, :location => @ticket }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
+    n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
+    (1..n).each do |i|
+      @ticket.user_reserved_id = 0
+      @ticket.nameOfSeat = i
+      @ticket.save
+    end
+      respond_to do |format|
+        if true
+          format.html { redirect_to(@ticket, :notice => 'Tickets were successfully created.') }
+          format.xml  { render :xml => @ticket, :status => :created, :location => @ticket }
+        else
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
       end
     end
   end

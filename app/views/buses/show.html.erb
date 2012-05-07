@@ -5,6 +5,11 @@
   <%= @bus.nameOfBus %>
 </p>
 
+<p>
+  <b>Capacity of the bus:</b>
+  <%= @bus.capacity %>
+</p>
+
 <%= link_to 'Edit', edit_bus_path(@bus) %> |
 <%= link_to 'Back', buses_path %>
 

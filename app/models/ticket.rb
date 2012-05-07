@@ -7,7 +7,7 @@ class Ticket < ActiveRecord::Base
 end
 #user_id - is used to recognize person who created a ticket
 #user_reserved_id - is used to recognize a person who reserved a ticket
-
+#bus_id - is used to recognize to which bus ticket is connected
 
 
 

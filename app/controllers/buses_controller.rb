@@ -41,7 +41,6 @@ class BusesController < ApplicationController
   # POST /buses.xml
   def create
     @bus = Bus.new(params[:bus])
-
     respond_to do |format|
       if @bus.save
         format.html { redirect_to(@bus, :notice => 'Bus was successfully created.') }
@@ -81,3 +80,4 @@ class BusesController < ApplicationController
     end
   end
 end
+

@@ -1,4 +1,5 @@
 class Bus < ActiveRecord::Base
+  validates :capacity, :numericality => { :only_integer => true }
   has_many :tickets
 end
 
