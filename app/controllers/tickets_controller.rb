@@ -81,9 +81,9 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.xml
   def create
-    @ticket = current_user.tickets.build(params[:ticket])
     n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
     (1..n).each do |i|
+      @ticket = current_user.tickets.build(params[:ticket])
       @ticket.user_reserved_id = 0
       @ticket.nameOfSeat = i
       @ticket.save
