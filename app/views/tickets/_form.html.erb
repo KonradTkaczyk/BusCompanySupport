@@ -16,6 +16,11 @@
     <%= f.datetime_select :dateOfTrip %>
   </div>
 
+    <div class="field">
+    <%= f.label :endOfTrip, "Date and time ending the Trip" %><br />
+    <%= f.datetime_select(:endOfTrip,:default => 3.hours.from_now) %>
+  </div>
+
   <div class="field">
     <%= f.label :to, "To" %> <br />
     <%= f.text_field :to %>

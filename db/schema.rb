@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120428192054) do
+ActiveRecord::Schema.define(:version => 20120510220152) do
 
   create_table "buses", :force => true do |t|
     t.string   "nameOfBus"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20120428192054) do
     t.datetime "dateOfTrip"
     t.string   "from"
     t.string   "to"
+    t.datetime "endOfTrip"
   end
 
   add_index "tickets", ["user_id"], :name => "index_tickets_on_user_id"
