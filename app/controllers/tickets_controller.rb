@@ -81,13 +81,24 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.xml
   def create
-    n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
-    (1..n).each do |i|
-      @ticket = current_user.tickets.build(params[:ticket])
-      @ticket.user_reserved_id = 0
-      @ticket.nameOfSeat = i
-      @ticket.save
-    end
+    startTime = DateTime.new(params[:ticket]["dateOfTrip(1i)"].to_i,
+                             params[:ticket]["dateOfTrip(2i)"].to_i,
+                             params[:ticket]["dateOfTrip(3i)"].to_i,
+                             params[:ticket]["dateOfTrip(4i)"].to_i,
+                             params[:ticket]["dateOfTrip(5i)"].to_i)
+    endTime = DateTime.new(params[:ticket]["endOfTrip(1i)"].to_i,
+                             params[:ticket]["endOfTrip(2i)"].to_i,
+                             params[:ticket]["endOfTrip(3i)"].to_i,
+                             params[:ticket]["endOfTrip(4i)"].to_i,
+                             params[:ticket]["endOfTrip(5i)"].to_i)
+    if endTime > startTime
+      n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
+      (1..n).each do |i|
+        @ticket = current_user.tickets.build(params[:ticket])
+        @ticket.user_reserved_id = 0
+        @ticket.nameOfSeat = i
+        @ticket.save
+      end
       respond_to do |format|
         if true
           format.html { redirect_to(@ticket, :notice => 'Tickets were successfully created.') }
@@ -95,7 +106,11 @@ class TicketsController < ApplicationController
         else
           format.html { render :action => "new" }
           format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
+        end
       end
+    else
+      flash[:error] = "You cannot create a ticket which ends sooner than it starts!!!"
+      redirect_to new_ticket_path
     end
   end
 
