@@ -91,7 +91,18 @@ class TicketsController < ApplicationController
                              params[:ticket]["endOfTrip(3i)"].to_i,
                              params[:ticket]["endOfTrip(4i)"].to_i,
                              params[:ticket]["endOfTrip(5i)"].to_i)
-    if endTime > startTime
+    #Find all tickets from 3 days before start of the trip
+    @tickets = Array.new
+    @tickets = Ticket.where("dateOfTrip > ? AND endOfTrip < ? AND bus_id = ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id])
+    @tickets.each do |i|
+      if i.endOfTrip < startTime
+        @tickets.delete(i)
+      elsif i.dateOfTrip > endTime
+        @tickets.delete(i)
+      else
+      end
+    end
+    if (endTime > startTime && @tickets.length == 0)
       n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
       (1..n).each do |i|
         @ticket = current_user.tickets.build(params[:ticket])
@@ -108,9 +119,13 @@ class TicketsController < ApplicationController
           format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
         end
       end
-    else
+    elsif(endTime < startTime)
       flash[:error] = "You cannot create a ticket which ends sooner than it starts!!!"
       redirect_to new_ticket_path
+    elsif(@tickets.length != 0)
+      flash[:error] = "Another ticket exist which collide with the dates. Ticket starting: #{@tickets[0].dateOfTrip} and ending: #{@tickets[0].endOfTrip} "
+      redirect_to new_ticket_path
+    else
     end
   end
 
