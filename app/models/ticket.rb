@@ -2,7 +2,8 @@ class Ticket < ActiveRecord::Base
   attr_accessible :from, :to, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id
   belongs_to :user
   belongs_to :bus
-
+  validates_datetime :dateOfTrip
+  validates_datetime :endOfTrip
 
 end
 #user_id - is used to recognize person who created a ticket

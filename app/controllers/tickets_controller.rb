@@ -81,6 +81,7 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.xml
   def create
+    error = false
     startTime = DateTime.new(params[:ticket]["dateOfTrip(1i)"].to_i,
                              params[:ticket]["dateOfTrip(2i)"].to_i,
                              params[:ticket]["dateOfTrip(3i)"].to_i,
@@ -92,32 +93,23 @@ class TicketsController < ApplicationController
                              params[:ticket]["endOfTrip(4i)"].to_i,
                              params[:ticket]["endOfTrip(5i)"].to_i)
     #Find all tickets from 3 days before start of the trip
-    @tickets = Array.new
-    @tickets = Ticket.where("dateOfTrip > ? AND endOfTrip < ? AND bus_id = ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id])
-    @tickets.each do |i|
-      if i.endOfTrip < startTime
-        @tickets.delete(i)
-      elsif i.dateOfTrip > endTime
-        @tickets.delete(i)
-      else
-      end
-    end
+    @tickets = Ticket.where("dateOfTrip > ? AND endOfTrip < ? AND bus_id = ? AND endOfTrip > ? AND dateOfTrip < ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id], startTime, endTime)
     if (endTime > startTime && @tickets.length == 0)
       n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
       (1..n).each do |i|
         @ticket = current_user.tickets.build(params[:ticket])
         @ticket.user_reserved_id = 0
         @ticket.nameOfSeat = i
-        @ticket.save
+        if !@ticket.save
+          respond_to do |format|
+            format.html { render :action => "new" }
+            format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
+          end
+        end
       end
       respond_to do |format|
-        if true
           format.html { redirect_to(@ticket, :notice => 'Tickets were successfully created.') }
           format.xml  { render :xml => @ticket, :status => :created, :location => @ticket }
-        else
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
-        end
       end
     elsif(endTime < startTime)
       flash[:error] = "You cannot create a ticket which ends sooner than it starts!!!"
