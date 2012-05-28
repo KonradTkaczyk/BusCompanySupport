@@ -6,6 +6,20 @@
 </p>
 
 <p>
+  <b>End of trip:</b>
+  <%= @ticket.endOfTrip %>
+</p>
+
+<p>
+  <b>Reserved to:</b>
+  <%if @ticket.user_reserved_id != 0%>
+  <%= link_to User.find(@ticket.user_reserved_id).name + " " + User.find(@ticket.user_reserved_id).surname, user_path(User.find(@ticket.user_reserved_id)) %>
+  <%else%>
+  Ticket is not reserved
+  <%end%>
+</p>
+
+<p>
   <b>Bus:</b>
   <%= link_to Bus.find(@ticket.bus_id).nameOfBus, bus_path(Bus.find(@ticket.bus_id)) %>
 </p>
