@@ -9,6 +9,20 @@
   <b>Capacity of the bus:</b>
   <%= @bus.capacity %>
 </p>
+<%= form_tag(@bus, :method => 'get') do %>
+  <div class="field">
+    Select date of travel:<br />
+    <%= collection_select :ticket, :id, Ticket.where("bus_id = ?", @bus.id).group("dateOfTrip"),:id,:dateOfTrip %>
+  </div>
+  <div class="actions">
+    <%= submit_tag "Show" %>
+  </div>
+<% end %>
+
+<% if @tickets != nil %>
+<b>Listing tickets for bus:</b> <%= @bus.nameOfBus %>
+<%= render 'tickets/index' %>
+<% end %>
 
 <%= link_to 'Edit', edit_bus_path(@bus) %> |
 <%= link_to 'Back', buses_path %>

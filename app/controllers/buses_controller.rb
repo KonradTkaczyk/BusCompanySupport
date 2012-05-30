@@ -14,7 +14,12 @@ class BusesController < ApplicationController
   # GET /buses/1.xml
   def show
     @bus = Bus.find(params[:id])
-
+    if params.has_key?(:ticket)
+      @dateOfTravel = Ticket.where("id = ?",params[:ticket][:id]).first.dateOfTrip
+      @tickets = Ticket.where("bus_id = ? AND dateOfTrip = ?", params[:id], @dateOfTravel)
+    else
+      @tickets = nil
+    end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @bus }
