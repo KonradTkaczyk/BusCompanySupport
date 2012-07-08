@@ -169,6 +169,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -187,5 +188,6 @@ end
 #  address            :string(255)
 #  city               :string(255)
 #  postalcode         :string(255)
+#  driver             :boolean         default(FALSE)
 #
 

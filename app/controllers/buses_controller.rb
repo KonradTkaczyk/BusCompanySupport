@@ -46,6 +46,7 @@ class BusesController < ApplicationController
   # POST /buses.xml
   def create
     @bus = Bus.new(params[:bus])
+    @bus.created_id = current_user.id
     respond_to do |format|
       if @bus.save
         format.html { redirect_to(@bus, :notice => 'Bus was successfully created.') }

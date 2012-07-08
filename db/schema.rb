@@ -10,13 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120510220152) do
+ActiveRecord::Schema.define(:version => 20120627232440) do
 
   create_table "buses", :force => true do |t|
     t.string   "nameOfBus"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "capacity"
+    t.integer  "user_id"
+    t.integer  "user_created_id"
   end
 
   create_table "tickets", :force => true do |t|
@@ -49,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120510220152) do
     t.string   "address"
     t.string   "city"
     t.string   "postalcode"
+    t.boolean  "driver",             :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

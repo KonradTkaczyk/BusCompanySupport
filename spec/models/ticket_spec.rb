@@ -30,6 +30,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: tickets
@@ -44,5 +45,6 @@ end
 #  dateOfTrip       :datetime
 #  from             :string(255)
 #  to               :string(255)
+#  endOfTrip        :datetime
 #
 

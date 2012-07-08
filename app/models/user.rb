@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
                   :birthday, :gender, :address, :city, :postalcode
 
   has_many :tickets
+  has_many :buses
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   postal_regex = /\d\d-\d\d\d/
@@ -68,6 +69,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -86,5 +88,6 @@ end
 #  address            :string(255)
 #  city               :string(255)
 #  postalcode         :string(255)
+#  driver             :boolean         default(FALSE)
 #
 
