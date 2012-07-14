@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20120627232440) do
     t.datetime "updated_at"
     t.integer  "capacity"
     t.integer  "user_id"
-    t.integer  "user_created_id"
+    t.integer  "driver_id"
   end
 
   create_table "tickets", :force => true do |t|

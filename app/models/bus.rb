@@ -3,8 +3,9 @@ class Bus < ActiveRecord::Base
   belongs_to :user
   has_many :tickets
 end
-#user_id - informs who is a driver of the bus_id
-#user_created_id - informs who created a bus
+#user_id - informs who created a bus
+#driver_id - informs who is a driver of the bus_id
+
 
 
 
@@ -12,12 +13,12 @@ end
 #
 # Table name: buses
 #
-#  id              :integer         not null, primary key
-#  nameOfBus       :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  capacity        :integer
-#  user_id         :integer
-#  user_created_id :integer
+#  id         :integer         not null, primary key
+#  nameOfBus  :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  capacity   :integer
+#  user_id    :integer
+#  driver_id  :integer
 #
 
