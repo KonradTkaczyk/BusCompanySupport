@@ -3,7 +3,7 @@ namespace :db do
   task :populate => :environment do
     Rake::Task['db:reset'].invoke
     admin = make_users
-    #make_buses(admin)
+    make_buses(admin)
     #make_tickets(admin)
   end
 end
@@ -44,7 +44,9 @@ def make_users
 end
 
 def make_buses (admin)
-  admin.buses.create!()
+  10.times do |n|
+    admin.buses.create!(:capacity => 10, :nameOfBus => "exampleBus-#{n+1}")
+  end
 end
 
 def make_tickets (admin,bus)
