@@ -50,6 +50,6 @@ def make_buses (admin)
 end
 
 def make_tickets (admin,bus)
-  admin.tickets.create!()
+  admin.tickets.create!(:dateOfTrip => Time.now, :endOfTrip => Time.now)
 end
 
