@@ -1,5 +1,5 @@
 class Ticket < ActiveRecord::Base
-  attr_accessible :from, :to, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id
+  attr_accessible :from, :to, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat
   belongs_to :user
   belongs_to :bus
   validates_datetime :dateOfTrip
