@@ -13,7 +13,7 @@ class TicketsController < ApplicationController
   # GET /tickets
   # GET /tickets.xml
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(params[:sort])
+    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tickets }
@@ -150,7 +150,12 @@ class TicketsController < ApplicationController
   end
 
   private
-
+    def sort_column
+      Ticket.column_names.include?(params[:sort]) ? params[:sort] : "dateOfTrip" #Protection against SQL injection (allows only names from column names available for class Ticket)
+    end
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc" #Protection against SQL injection (allows only ascending and descending orders)
+    end
     def admin_user
       redirect_to(root_path) unless current_user.admin?
     end

@@ -1,10 +1,11 @@
+<%= will_paginate %>
 <table>
   <tr>
-    <th><%= link_to "From", :sort => "from" %></th>
-    <th><%= link_to "To", :sort => "to" %></th>
-    <th><%= link_to "Date of Trip", :sort =>"dateOfTrip" %></th>
-    <th><%= link_to "End of Trip", :sort => "endOfTrip" %></th>
-    <th><%= link_to "Bus", :sort => "bus_id" %></th>
+    <th><%= sortable "cityFrom" %></th>
+    <th><%= sortable "cityTo" %></th>
+    <th><%= sortable "dateOfTrip" %></th>
+    <th><%= sortable "endOfTrip" %></th>
+    <th><%= sortable "bus_id" %></th>
     <th></th>
     <th></th>
     <th></th>
@@ -12,8 +13,8 @@
 
 <% @tickets.each do |ticket| %>
   <tr>
-    <td><%= ticket.from %></td>
-    <td><%= ticket.to %></td>
+    <td><%= ticket.cityFrom %></td>
+    <td><%= ticket.cityTo %></td>
     <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <% if ticket.bus_id != nil %>
@@ -33,6 +34,6 @@
   </tr>
 <% end %>
 </table>
-
+<%= will_paginate %>
 <br />
 
