@@ -13,7 +13,7 @@ class TicketsController < ApplicationController
   # GET /tickets
   # GET /tickets.xml
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
+    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:search]}%", "%#{params[:search2]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tickets }
