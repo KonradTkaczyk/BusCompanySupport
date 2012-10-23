@@ -31,6 +31,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: tickets
@@ -43,8 +44,8 @@ end
 #  nameOfSeat       :string(255)
 #  bus_id           :integer
 #  dateOfTrip       :datetime
-#  from             :string(255)
-#  to               :string(255)
+#  cityFrom         :string(255)
+#  cityTo           :string(255)
 #  endOfTrip        :datetime
 #
 

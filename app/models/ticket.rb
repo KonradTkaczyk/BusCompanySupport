@@ -1,15 +1,20 @@
 class Ticket < ActiveRecord::Base
-  attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat
+
+attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat
   belongs_to :user
   belongs_to :bus
   validates_datetime :dateOfTrip
   validates_datetime :endOfTrip
 
-end
 #user_id - is used to recognize person who created a ticket
 #user_reserved_id - is used to recognize a person who reserved a ticket
 #bus_id - is used to recognize to which bus ticket is connected
 
+  def cost_of_trip #Time cost of the trip used to calculate shortest path.
+    (self.endOfTrip - self.dateOfTrip).round
+  end
+
+end
 
 
 
@@ -25,8 +30,8 @@ end
 #  nameOfSeat       :string(255)
 #  bus_id           :integer
 #  dateOfTrip       :datetime
-#  from             :string(255)
-#  to               :string(255)
+#  cityFrom         :string(255)
+#  cityTo           :string(255)
 #  endOfTrip        :datetime
 #
 
