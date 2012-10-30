@@ -1,0 +1,45 @@
+<% form_tag tickets_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= text_field_tag :search2, params[:search2] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<table>
+  <tr>
+    <th><%= sortable "cityFrom" %></th>
+    <th><%= sortable "cityTo" %></th>
+    <th><%= sortable "dateOfTrip" %></th>
+    <th><%= sortable "endOfTrip" %></th>
+    <th><%= sortable "bus_id" %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tickets.each do |ticket| %>
+  <tr>
+    <td><%= ticket.cityFrom %></td>
+    <td><%= ticket.cityTo %></td>
+    <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+    <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+    <% if ticket.bus_id != nil %>
+    <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+    <% end %>
+    <% if current_user.admin? %>
+      <td><%= link_to 'Show', ticket %></td>
+      <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
+      <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% else %>
+      <% if ticket.user_reserved_id == 0 %>
+      <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
+      <% else %>
+      <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
+      <% end %>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+<br />
+
