@@ -57,6 +57,7 @@ def make_tickets (admin)
       admin.tickets.create!(:dateOfTrip => Time.now + 2.days + n.days + 4.hours, :endOfTrip => Time.now + 2.days + n.days + 6.hours, :bus_id => 3, :cityFrom => "Ciechanow", :cityTo => "Olsztyn", :nameOfSeat => "#{n+1}")
       admin.tickets.create!(:dateOfTrip => Time.now + 2.days + n.days, :endOfTrip => Time.now + 2.days + n.days + 2.hours, :bus_id => 4, :cityFrom  => "Warsaw", :cityTo => "Radom", :nameOfSeat => "#{n+1}")
       admin.tickets.create!(:dateOfTrip => Time.now + 2.days + n.days + 2.hours, :endOfTrip => Time.now + 2.days + n.days + 4.hours, :bus_id => 4, :cityFrom => "Radom", :cityTo => "Warsaw", :nameOfSeat => "#{n+1}")
+      admin.tickets.create!(:dateOfTrip => Time.now + 2.days + n.days + 2.hours, :endOfTrip => Time.now + 2.days + n.days + 4.hours, :bus_id => 4, :cityFrom => "Gdansk", :cityTo => "Szczecin", :nameOfSeat => "#{n+1}")
     end
 end
 

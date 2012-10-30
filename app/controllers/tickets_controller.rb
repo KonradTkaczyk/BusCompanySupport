@@ -34,9 +34,6 @@ class TicketsController < ApplicationController
         if ticket.cityTo == params[:search2]
           j = j + 1
         end
-        logger.debug i
-        logger.debug "ldfkjjglkdfsjgl;dsjf;lgkjdf;olkj"
-        logger.debug j
       end
       if i > 0 and j > 0
         g = TicketsHelper::Graph.new (array2)
@@ -44,9 +41,17 @@ class TicketsController < ApplicationController
         stop  = g.vertices[params[:search2]]
         path = g.shortest_path(start, stop)
         puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
-        shortest = Array.new(path.map {|vertex| vertex.name})
+        logger.debug shortest = Array.new(path.map {|vertex| vertex.name})
+        @tickets = Ticket.tickets_for_shortest_path(shortest)
+        logger.debug "\/____________________________\/"
+        logger.debug @tickets.class
+        logger.debug "^______________________________^"
+        respond_to do |format|
+          format.html { redirect_to(shortest_path_ticket_path)}
+          format.xml  { render :xml => @tickets }
+        end
       else
-        @tickets = Ticket.where("user_reserved_id = -1").paginate(:page => params[:page])
+        @tickets = Ticket.where("user_reserved_id = -1").paginate(:page => params[:page]) #dirty way to clean founded tickets
       end
     else
       respond_to do |format|

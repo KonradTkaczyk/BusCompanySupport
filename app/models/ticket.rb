@@ -14,6 +14,22 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
     (self.endOfTrip - self.dateOfTrip).round
   end
 
+  def self.tickets_for_shortest_path (shortest)
+    i = 0
+    ticketsOfShortestPath = Array.new()
+    while !shortest[i+1].nil?
+      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",Time.now, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").limit(1)
+      ticket2.each do |ticket|
+        logger.debug ticket.cityFrom
+        logger.debug i
+        ticketsOfShortestPath.push(ticket)
+        i = i + 1
+      end
+    end
+    logger.debug ticketsOfShortestPath
+    return ticketsOfShortestPath
+  end
+
 end
 
 

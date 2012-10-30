@@ -12,6 +12,7 @@ BusCompanySupport::Application.routes.draw do
   end
   resource :ticket do
     get 'reserved_index'
+    get 'shortest_path'
   end
 
   resources :users
