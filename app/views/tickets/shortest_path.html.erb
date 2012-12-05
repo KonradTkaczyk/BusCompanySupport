@@ -16,6 +16,7 @@
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @tickets.each do |ticket| %>
@@ -26,6 +27,7 @@
     <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <% if ticket.bus_id != nil %>
     <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+    <td><%= ticket.nameOfSeat %></td>
     <% end %>
     <% if current_user.admin? %>
       <td><%= link_to 'Show', ticket %></td>
@@ -33,6 +35,7 @@
       <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
     <% else %>
       <% if ticket.user_reserved_id == 0 %>
+
       <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
       <% else %>
       <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
@@ -42,4 +45,5 @@
 <% end %>
 </table>
 <br />
+<%= link_to "Reserve all tickets above", :reserve => "yes", :tickets => @tickets %>
 

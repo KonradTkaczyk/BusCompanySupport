@@ -16,13 +16,15 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
 
   def self.tickets_for_shortest_path (shortest)
     i = 0
+    endoftrip = Time.now #starting time to search the tickets, then used as variable to find tickets after previous ticket ends so all tickets can line up in time.
     ticketsOfShortestPath = Array.new()
     while !shortest[i+1].nil?
-      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",Time.now, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").limit(1)
+      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",endoftrip, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").limit(1)
       ticket2.each do |ticket|
-        logger.debug ticket.cityFrom
-        logger.debug i
+        endoftrip = ticket.endOfTrip
         ticketsOfShortestPath.push(ticket)
+        logger.debug(ticket)
+        logger.debug(i)
         i = i + 1
       end
     end

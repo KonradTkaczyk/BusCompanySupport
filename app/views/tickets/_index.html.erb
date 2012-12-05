@@ -17,6 +17,7 @@
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @tickets.each do |ticket| %>
@@ -27,6 +28,7 @@
     <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <% if ticket.bus_id != nil %>
     <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+    <td><%= ticket.nameOfSeat %></td>
     <% end %>
     <% if current_user.admin? %>
       <td><%= link_to 'Show', ticket %></td>

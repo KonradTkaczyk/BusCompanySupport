@@ -1,9 +1,10 @@
 class TicketsController < ApplicationController
+
    before_filter :authenticate
    before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
 
   def reserved_index
-    @tickets = Ticket.where(:user_reserved_id => current_user.id)
+    @tickets = Ticket.where(:user_reserved_id => current_user.id).paginate(:page => params[:page])
     respond_to do |format|
       format.html # reserved_index.html.erb
       format.xml  { render :xml => @tickets }
@@ -43,9 +44,23 @@ class TicketsController < ApplicationController
         puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
         shortest = Array.new(path.map {|vertex| vertex.name})
         @tickets = Ticket.tickets_for_shortest_path(shortest)
+        @tickets
         respond_to do |format|
           format.html { render :shortest_path }
           format.xml  { render :xml => @tickets }
+        end
+      end
+      if params[:reserve] == 'yes'
+        @tickets = Ticket.find(params[:tickets])
+        @tickets.each do |ticket|
+          if ticket.user_reserved_id == 0
+            ticket.user_reserved_id = current_user.id
+            ticket.save
+          end
+        end
+        respond_to do |format|
+          format.html { redirect_to(reserved_index_ticket_path) }
+          format.xml  { head :ok }
         end
       end
     else
