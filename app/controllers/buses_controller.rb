@@ -1,6 +1,8 @@
 class BusesController < ApplicationController
-  # GET /buses
-  # GET /buses.xml
+  before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
+  before_filter :correct_user, :only => [:edit, :update]
+  before_filter :admin_user,   :only => [:destroy]
+
   def index
     @buses = Bus.all
 
@@ -16,7 +18,7 @@ class BusesController < ApplicationController
     @bus = Bus.find(params[:id])
     if params.has_key?(:ticket)
       @dateOfTravel = Ticket.where("id = ?",params[:ticket][:id]).first.dateOfTrip
-      @tickets = Ticket.where("bus_id = ? AND dateOfTrip = ?", params[:id], @dateOfTravel)
+      @tickets = Ticket.where("bus_id = ? AND dateOfTrip < ? AND dateOfTrip > ?", params[:id], @dateOfTravel + 10.minutes, @dateOfTravel - 10.minutes)
     else
       @tickets = nil
     end
@@ -85,5 +87,15 @@ class BusesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+    private
+
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to root_path unless current_user?(@user)
+    end
+
+    def admin_user
+      redirect_to(root_path) unless current_user.admin?
+    end
 end
 

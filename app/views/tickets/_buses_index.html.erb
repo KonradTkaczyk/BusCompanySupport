@@ -1,11 +1,10 @@
-<%= will_paginate %>
 <table>
   <tr>
-    <th><%= sortable "cityFrom" %></th>
-    <th><%= sortable "cityTo" %></th>
-    <th><%= sortable "dateOfTrip" %></th>
-    <th><%= sortable "endOfTrip" %></th>
-    <th><%= sortable "bus_id" %></th>
+    <th><%= "cityFrom" %></th>
+    <th><%= "cityTo" %></th>
+    <th><%= "dateOfTrip" %></th>
+    <th><%= "endOfTrip" %></th>
+    <th><%= "bus_id" %></th>
     <th></th>
     <th></th>
     <th></th>
@@ -35,6 +34,6 @@
   </tr>
 <% end %>
 </table>
-<%= will_paginate %>
 <br />
+<%= link_to 'Back', root_path %>
 

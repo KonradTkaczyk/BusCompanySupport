@@ -21,9 +21,11 @@
 
 <% if @tickets != nil %>
 <b>Listing tickets for bus:</b> <%= @bus.nameOfBus %>
-<%= render 'tickets/index' %>
+<%= render 'tickets/buses_index' %>
 <% end %>
-
-<%= link_to 'Edit', edit_bus_path(@bus) %> |
-<%= link_to 'Back', buses_path %>
+<% if current_user.admin? %>
+  <%= link_to 'Edit', edit_bus_path(@bus) %> |
+<% end %>
+<br />
+<%= link_to 'Back to buses', buses_path %>
 
