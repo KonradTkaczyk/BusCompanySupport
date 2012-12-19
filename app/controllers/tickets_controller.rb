@@ -44,23 +44,28 @@ class TicketsController < ApplicationController
         puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
         shortest = Array.new(path.map {|vertex| vertex.name})
         @tickets = Ticket.tickets_for_shortest_path(shortest)
-        @tickets
         respond_to do |format|
           format.html { render :shortest_path }
           format.xml  { render :xml => @tickets }
         end
       end
       if params[:reserve] == 'yes'
+        @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
         @tickets = Ticket.find(params[:tickets])
-        @tickets.each do |ticket|
-          if ticket.user_reserved_id == 0
-            ticket.user_reserved_id = current_user.id
-            ticket.save
+        if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
+          @tickets.each do |ticket|
+            if ticket.user_reserved_id == 0
+              ticket.user_reserved_id = current_user.id
+              ticket.save
+            end
           end
-        end
-        respond_to do |format|
-          format.html { redirect_to(reserved_index_ticket_path) }
-          format.xml  { head :ok }
+          respond_to do |format|
+            format.html { redirect_to(reserved_index_ticket_path) }
+            format.xml  { head :ok }
+          end
+        else
+          flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
+          redirect_to tickets_path
         end
       end
     else
@@ -83,12 +88,18 @@ class TicketsController < ApplicationController
   end
 
   def reserve
-    @ticket = Ticket.find(params[:id])
-    @ticket.user_reserved_id = current_user.id
-    @ticket.save
-    respond_to do |format|
-      format.html { redirect_to(reserved_index_ticket_path) }
-      format.xml  { head :ok }
+    @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
+    if(@userTickets.length <= 10)
+      @ticket = Ticket.find(params[:id])
+      @ticket.user_reserved_id = current_user.id
+      @ticket.save
+      respond_to do |format|
+        format.html { redirect_to(reserved_index_ticket_path) }
+        format.xml  { head :ok }
+      end
+    else
+      flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservation done"
+      redirect_to tickets_path
     end
   end
 

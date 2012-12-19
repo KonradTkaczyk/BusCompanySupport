@@ -23,12 +23,9 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
       ticket2.each do |ticket|
         endoftrip = ticket.endOfTrip
         ticketsOfShortestPath.push(ticket)
-        logger.debug(ticket)
-        logger.debug(i)
         i = i + 1
       end
     end
-    logger.debug ticketsOfShortestPath
     return ticketsOfShortestPath
   end
 
