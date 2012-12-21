@@ -20,6 +20,9 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
     ticketsOfShortestPath = Array.new()
     while !shortest[i+1].nil?
       ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",endoftrip, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").limit(1)
+      if(ticket2.length == 0)
+        return nil
+      end
       ticket2.each do |ticket|
         endoftrip = ticket.endOfTrip
         ticketsOfShortestPath.push(ticket)

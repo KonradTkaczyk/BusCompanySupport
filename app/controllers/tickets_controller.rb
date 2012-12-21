@@ -16,7 +16,7 @@ class TicketsController < ApplicationController
   def index
     @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:search]}%", "%#{params[:search2]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
     end
     if @tickets.length != 0
       array = Array.new()
@@ -27,7 +27,9 @@ class TicketsController < ApplicationController
         array.push(ticket.cityFrom)
         array.push(ticket.cityTo)
         array.push(ticket.cost_of_trip)
-        array2.push(Array.new(array))
+        if (!array2.include?(array)) #adding only paths that are not in array already
+          array2.push(Array.new(array))
+        end
         array.clear
         if ticket.cityFrom == params[:search]
           i = i + 1
@@ -38,6 +40,9 @@ class TicketsController < ApplicationController
       end
       if i > 0 and j > 0
         g = TicketsHelper::Graph.new (array2)
+        logger.debug("***************************")
+        logger.debug(array2)
+        logger.debug("***************************")
         start = g.vertices[params[:search]]
         stop  = g.vertices[params[:search2]]
         path = g.shortest_path(start, stop)
@@ -69,6 +74,7 @@ class TicketsController < ApplicationController
         end
       end
     else
+    @tickets.paginate(:page => params[:page])
       respond_to do |format|
         format.html # index.html.erb
         format.xml  { render :xml => @tickets }

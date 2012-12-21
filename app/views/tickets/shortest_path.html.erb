@@ -45,5 +45,9 @@
 <% end %>
 </table>
 <br />
+<% if @tickets == nil %>
+Sorry no possible route have been found.
+<% end %>
+<br />
 <%= link_to "Reserve all tickets above", :reserve => "yes", :tickets => @tickets %>
 
