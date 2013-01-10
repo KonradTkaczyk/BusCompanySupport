@@ -14,67 +14,74 @@ class TicketsController < ApplicationController
   # GET /tickets
   # GET /tickets.xml
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:search]}%", "%#{params[:search2]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
-    if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
-    end
-    if @tickets.length != 0
-      array = Array.new()
-      array2 = Array.new()
-      i = 0
-      j = 0
-      @tickets.each do |ticket| #adding all tickets data to array to provide to Dijkstra algorithm
-        array.push(ticket.cityFrom)
-        array.push(ticket.cityTo)
-        array.push(ticket.cost_of_trip)
-        if (!array2.include?(array)) #adding only paths that are not in array already
-          array2.push(Array.new(array))
-        end
-        array.clear
-        if ticket.cityFrom == params[:search]
-          i = i + 1
-        end
-        if ticket.cityTo == params[:search2]
-          j = j + 1
-        end
+    if(params.has_key?(:ticket))
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
+      if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
+        @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
       end
-      if i > 0 and j > 0
-        g = TicketsHelper::Graph.new (array2)
-        logger.debug("***************************")
-        logger.debug(array2)
-        logger.debug("***************************")
-        start = g.vertices[params[:search]]
-        stop  = g.vertices[params[:search2]]
-        path = g.shortest_path(start, stop)
-        puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
-        shortest = Array.new(path.map {|vertex| vertex.name})
-        @tickets = Ticket.tickets_for_shortest_path(shortest)
+      if @tickets.length != 0
+        array = Array.new()
+        array2 = Array.new()
+        i = 0
+        j = 0
+        @tickets.each do |ticket| #adding all tickets data to array to provide to Dijkstra algorithm
+          array.push(ticket.cityFrom)
+          array.push(ticket.cityTo)
+          array.push(ticket.cost_of_trip)
+          if (!array2.include?(array)) #adding only paths that are not in array already
+            array2.push(Array.new(array))
+          end
+          array.clear
+          if ticket.cityFrom == params[:ticket][:cityFrom]
+            i = i + 1
+          end
+          if ticket.cityTo == params[:ticket][:cityTo]
+            j = j + 1
+          end
+        end
+        if i > 0 and j > 0
+          g = TicketsHelper::Graph.new (array2)
+          start = g.vertices[params[:ticket][:cityFrom]]
+          stop  = g.vertices[params[:ticket][:cityTo]]
+          path = g.shortest_path(start, stop)
+          puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
+          shortest = Array.new(path.map {|vertex| vertex.name})
+          @tickets = Ticket.tickets_for_shortest_path(shortest)
+          respond_to do |format|
+            format.html { render :shortest_path }
+            format.xml  { render :xml => @tickets }
+          end
+        end
+      else
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
         respond_to do |format|
-          format.html { render :shortest_path }
+          format.html # index.html.erb
           format.xml  { render :xml => @tickets }
         end
       end
-      if params[:reserve] == 'yes'
-        @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
-        @tickets = Ticket.find(params[:tickets])
-        if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
-          @tickets.each do |ticket|
-            if ticket.user_reserved_id == 0
-              ticket.user_reserved_id = current_user.id
-              ticket.save
-            end
+    elsif params[:reserve] == 'yes'
+      @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
+      @tickets = Ticket.find(params[:tickets])
+      logger.debug("**********************************")
+      logger.debug(@tickets)
+      logger.debug("**********************************")
+      if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
+        @tickets.each do |ticket|
+          if ticket.user_reserved_id == 0
+            ticket.user_reserved_id = current_user.id
+            ticket.save
           end
-          respond_to do |format|
-            format.html { redirect_to(reserved_index_ticket_path) }
-            format.xml  { head :ok }
-          end
-        else
-          flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
-          redirect_to tickets_path
         end
+        respond_to do |format|
+          format.html { redirect_to(reserved_index_ticket_path) }
+          format.xml  { head :ok }
+        end
+      else
+        flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
+        redirect_to tickets_path
       end
     else
-    @tickets.paginate(:page => params[:page])
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
       respond_to do |format|
         format.html # index.html.erb
         format.xml  { render :xml => @tickets }
