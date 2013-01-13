@@ -247,4 +247,9 @@ th .desc:after {
   margin-top: 7px;
   margin-left: 5px;
 }
+#map {
+    border: 2px solid black;
+    height: 500px;
+    width: 500px;
+}
 

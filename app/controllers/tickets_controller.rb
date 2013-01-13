@@ -62,9 +62,6 @@ class TicketsController < ApplicationController
     elsif params[:reserve] == 'yes'
       @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
       @tickets = Ticket.find(params[:tickets])
-      logger.debug("**********************************")
-      logger.debug(@tickets)
-      logger.debug("**********************************")
       if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
         @tickets.each do |ticket|
           if ticket.user_reserved_id == 0
