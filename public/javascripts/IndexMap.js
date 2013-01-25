@@ -1,4 +1,4 @@
-var map, baseLayer, markers;
+var map, baseLayer, markers, lineLayer;
 function init()
 {
   map = new OpenLayers.Map('map');
@@ -10,6 +10,9 @@ function init()
   map.setCenter(position,6);
   markers = new OpenLayers.Layer.Markers("Cities");
   map.addLayer(markers);
+  lineLayer = new OpenLayers.Layer.Vector("Line Layer");
+	map.addLayer(lineLayer);
+	map.addControl(new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path));
 }
 
 function jumpTo()
@@ -41,10 +44,7 @@ function jumpTo()
   icon = new OpenLayers.Icon('images/marker2.png',size,offset);
   markers.addMarker(new OpenLayers.Marker(location2,icon.clone()));
 
-  var lineLayer = new OpenLayers.Layer.Vector("Line Layer");
-
-	map.addLayer(lineLayer);
-	map.addControl(new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path));
+	lineLayer.removeAllFeatures();
 	var points = new Array
 	(
    new OpenLayers.Geometry.Point(location.lon, location.lat),
