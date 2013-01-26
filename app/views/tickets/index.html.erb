@@ -7,11 +7,11 @@
     <%= form_tag(tickets_path, :method => 'get') do %>
     <div class="field">
       Select city from trip begins:<br />
-      <%= collection_select :ticket, :cityFrom, Ticket.find(:all, :select => "DISTINCT cityFrom", :order => "cityFrom"),:cityFrom,:cityFrom,{},{:onchange=>"jumpTo();"} %>
+      <%= collection_select :ticket, :cityFrom, Ticket.find(:all, :select => "DISTINCT cityFrom", :order => "cityFrom"),:cityFrom,:cityFrom,{:prompt => true},{:onchange=>"jumpTo();"} %>
     </div>
     <div class="field">
     Select city in which trip ends:<br />
-    <%= collection_select :ticket, :cityTo, Ticket.find(:all, :select => "DISTINCT cityTo", :order => "cityTo"),:cityTo,:cityTo,{},{:onchange=>"jumpTo();"} %>
+    <%= collection_select :ticket, :cityTo, Ticket.find(:all, :select => "DISTINCT cityTo", :order => "cityTo"),:cityTo,:cityTo,{:prompt => true},{:onchange=>"jumpTo();"} %>
     </div>
     <div class="actions">
       <%= submit_tag "Search", :name => nil %>
