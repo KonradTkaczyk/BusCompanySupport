@@ -1,4 +1,4 @@
-var map, baseLayer, markers, lineLayer;
+	var map, baseLayer, markers, lineLayer;
   var cities = new Object();
   cities['Radom'] = "21.15, 51.40";
   cities['Gdansk'] = "18.633333,54.366667";
@@ -8,7 +8,7 @@ var map, baseLayer, markers, lineLayer;
   cities['Warsaw'] = "21.008333, 52.232222";
   var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
   var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-
+  var root = location.protocol + '//' + location.host;
 function init()
 {
   map = new OpenLayers.Map('map');
@@ -28,12 +28,12 @@ function mapMarkers()
   markers.clearMarkers();
   var selectBox = document.getElementById('ticket_cityFrom');
   if (selectBox.value == "") return;
-  var locationPlace = cities[selectBox.value]
-  var location = marker(locationPlace, "images/marker.png");//function to place a marker on map with specific icon.
+  var locationPlace = cities[selectBox.value];
+  var location = marker(locationPlace, root + "/images/marker.png");//function to place a marker on map with specific icon.
   selectBox = document.getElementById('ticket_cityTo');
   if (selectBox.value == "") return;
-  locationPlace = cities[selectBox.value]
-  var location2 = marker(locationPlace, "images/marker2.png")
+  locationPlace = cities[selectBox.value];
+  var location2 = marker(locationPlace, root + "/images/marker2.png");
 
   lineLayer.removeAllFeatures();
 	line(location,location2);
@@ -83,11 +83,12 @@ function ShortestPath()
 	var locations = new Array;
 	for (var i=0;i<arr.length;i++)
 	{
-		locations.push(marker(cities[arr[i]],"images/marker.png"));//coordination points to draw lines
+		locations.push(marker(cities[arr[i]],root + "/images/marker.png"));//coordination points to draw lines
 	}
 	lines(locations);
-	console.log(locations);
+	console.log(root);
 }
+
 function marker(locationPlace, iconAdress)
 {
 	var parse = locationPlace.split(',');
@@ -96,6 +97,6 @@ function marker(locationPlace, iconAdress)
   var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
   var icon = new OpenLayers.Icon(iconAdress,size,offset);
   markers.addMarker(new OpenLayers.Marker(location,icon.clone()));
-  return location
+  return location;
 }
 

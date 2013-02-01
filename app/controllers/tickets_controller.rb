@@ -11,11 +11,27 @@ class TicketsController < ApplicationController
     end
   end
 
-  # GET /tickets
-  # GET /tickets.xml
   def index
     if(params.has_key?(:ticket))
       @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @tickets }
+      end
+    else
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @tickets }
+      end
+    end
+  end
+
+  # GET /tickets
+  # GET /tickets.xml
+  def search
+    if(params.has_key?(:ticket))
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%")
       if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
         @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
       end

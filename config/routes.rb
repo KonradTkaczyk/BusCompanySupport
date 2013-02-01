@@ -13,6 +13,7 @@ BusCompanySupport::Application.routes.draw do
   resource :ticket do
     get 'reserved_index'
     get 'shortest_path'
+    get 'search'
   end
 
   resources :users

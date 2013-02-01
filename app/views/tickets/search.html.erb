@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "OpenLayers.js" %>
+  <%= javascript_include_tag "IndexMap.js" %>
+<% end %>
+
+<html>
+  <head>
+    <h1>Listing all available tickets</h1>
+    <%= form_tag(search_ticket_path, :method => 'get') do %>
+    <div class="field">
+      Select city from trip begins:<br />
+      <%= collection_select :ticket, :cityFrom, Ticket.find(:all, :select => "DISTINCT cityFrom", :order => "cityFrom"),:cityFrom,:cityFrom,{:prompt => true},{:onchange=>"mapMarkers();"} %>
+    </div>
+    <div class="field">
+    Select city in which trip ends:<br />
+    <%= collection_select :ticket, :cityTo, Ticket.find(:all, :select => "DISTINCT cityTo", :order => "cityTo"),:cityTo,:cityTo,{:prompt => true},{:onchange=>"mapMarkers();"} %>
+    </div>
+    <div class="actions">
+      <%= submit_tag "Search", :name => nil %>
+    </div>
+    <% end %>
+  </head>
+  <body onload="init()">
+    <div id="map"></div>
+    <br />
+  </body>
+</html>
+
