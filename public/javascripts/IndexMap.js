@@ -21,7 +21,12 @@ function init()
   lineLayer = new OpenLayers.Layer.Vector("Line Layer");
 	map.addLayer(lineLayer);
 	map.addControl(new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path));
+	if ($('#FoundTickets').length)
+	{
+		ShortestPath();
+	}
 }
+
 
 function mapMarkers()
 {
@@ -99,4 +104,5 @@ function marker(locationPlace, iconAdress)
   markers.addMarker(new OpenLayers.Marker(location,icon.clone()));
   return location;
 }
+window.onload = init;
 

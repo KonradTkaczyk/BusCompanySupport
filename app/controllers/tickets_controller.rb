@@ -12,18 +12,10 @@ class TicketsController < ApplicationController
   end
 
   def index
-    if(params.has_key?(:ticket))
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
-      respond_to do |format|
-        format.html # index.html.erb
-        format.xml  { render :xml => @tickets }
-      end
-    else
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
-      respond_to do |format|
-        format.html # index.html.erb
-        format.xml  { render :xml => @tickets }
-      end
+    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @tickets }
     end
   end
 
@@ -69,7 +61,7 @@ class TicketsController < ApplicationController
           end
         end
       else
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
         respond_to do |format|
           format.html # index.html.erb
           format.xml  { render :xml => @tickets }
@@ -92,12 +84,6 @@ class TicketsController < ApplicationController
       else
         flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
         redirect_to tickets_path
-      end
-    else
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).paginate(:page => params[:page])
-      respond_to do |format|
-        format.html # index.html.erb
-        format.xml  { render :xml => @tickets }
       end
     end
   end

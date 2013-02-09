@@ -4,8 +4,8 @@
   <%= javascript_include_tag "IndexMap.js" %>
 <% end %>
 
-<html>
-  <head>
+
+<div>
     <h1>Listing all available tickets</h1>
     <%= form_tag(search_ticket_path, :method => 'get') do %>
     <div class="field">
@@ -20,10 +20,8 @@
       <%= submit_tag "Search", :name => nil %>
     </div>
     <% end %>
-  </head>
-  <body onload="init()">
+    <br />
     <div id="map"></div>
     <br />
-  </body>
-</html>
+</div>
 
