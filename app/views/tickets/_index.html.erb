@@ -1,4 +1,3 @@
-<%= will_paginate %>
 <table>
   <tr>
     <th><%= sortable "cityFrom" %></th>
@@ -6,37 +5,45 @@
     <th><%= sortable "dateOfTrip" %></th>
     <th><%= sortable "endOfTrip" %></th>
     <th><%= sortable "bus_id" %></th>
+    <th>Seat number</th>
     <th></th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
-<% trip = 0 %>
+<% trip = 1 %>
+<% prevTicket = Ticket.new %>
 <% tripTickets = Array.new %>
-<% @tickets.each do |ticket| %>
-
-  <tr>
-    <td><%= ticket.cityFrom %></td>
-    <td><%= ticket.cityTo %></td>
-    <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <% if ticket.bus_id != nil %>
-    <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
-    <td><%= ticket.nameOfSeat %></td>
-    <% end %>
-    <% if current_user.admin? %>
-      <td><%= link_to 'Show', ticket %></td>
-      <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
-      <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
-    <% end %>
-    <% if ticket.user_reserved_id == 0 %>
-    <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
-    <% else %>
-    <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
-    <% end %>
-  </tr>
+<% @tickets.each do |ticket2| %>
+<% logger.debug(ticket2.cityFrom) %>
+  <% if ticket2.trip != trip %>
+  <% trip = ticket2.trip %>
+  <% logger.debug(tripTickets) %>
+    <tr>
+      <td><%= prevTicket.cityFrom %></td>
+      <td><%= prevTicket.cityTo %></td>
+      <td><%= prevTicket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= prevTicket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if prevTicket.bus_id != nil %>
+      <td><%= link_to Bus.find(prevTicket.bus_id).nameOfBus, bus_path(Bus.find(prevTicket.bus_id))  %></td>
+      <td><%= select_tag("Seat number", options_for_select(tripTickets.collect{ |u| [u] }))%></td>
+      <% end %>
+      <% if current_user.admin? %>
+        <td><%= link_to 'Show', prevTicket %></td>
+        <td><%= link_to 'Edit', edit_ticket_path(prevTicket) %></td>
+        <td><%= button_to 'Destroy', prevTicket, :confirm => 'Are you sure?', :method => :delete %></td>
+      <% end %>
+      <% if prevTicket.user_reserved_id == 0 %>
+      <td><%= button_to 'Reserve', reserve_ticket_path(prevTicket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
+      <% else %>
+      <td><%= button_to 'Unreserve', unreserve_ticket_path(prevTicket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
+      <% end %>
+    </tr>
+    <% tripTickets.clear %>
+  <% end %>
+  <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
+  <% prevTicket = ticket2 %>
 <% end %>
 </table>
-<%= will_paginate %>
 <br />
 

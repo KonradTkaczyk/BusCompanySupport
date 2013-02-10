@@ -12,7 +12,7 @@ class TicketsController < ApplicationController
   end
 
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
+    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tickets }
@@ -100,6 +100,9 @@ class TicketsController < ApplicationController
   end
 
   def reserve
+    logger.debug("***********************")
+    logger.debug(params)
+    logger.debug("***********************")
     @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
     if(@userTickets.length <= 10)
       @ticket = Ticket.find(params[:id])
