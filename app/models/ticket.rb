@@ -1,11 +1,17 @@
 class Ticket < ActiveRecord::Base
 
-attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat
+attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat, :trip, :bought
+  validates :cityFrom,  :presence   => true
+  validates :cityTo,    :presence   => true
+  validates :dateOfTrip,:presence   => true
+  validates :endOfTrip, :presence   => true
+  validates :nameOfSeat,:presence   => true
+  validates :trip,      :presence   => true
   belongs_to :user
   belongs_to :bus
-  validates_datetime :dateOfTrip
-  validates_datetime :endOfTrip
 
+#trip - is used to group tickets in the trip - each trip is unique
+#bought - is used to check if ticket was bought - this will be filled by driver before starting the bus.
 #user_id - is used to recognize person who created a ticket
 #user_reserved_id - is used to recognize a person who reserved a ticket
 #bus_id - is used to recognize to which bus ticket is connected

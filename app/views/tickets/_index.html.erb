@@ -11,8 +11,10 @@
     <th></th>
     <th></th>
   </tr>
-
+<% trip = 0 %>
+<% tripTickets = Array.new %>
 <% @tickets.each do |ticket| %>
+
   <tr>
     <td><%= ticket.cityFrom %></td>
     <td><%= ticket.cityTo %></td>
