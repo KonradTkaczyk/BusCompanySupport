@@ -51,4 +51,13 @@ Sorry no possible route have been found.
 <% end %>
 <br />
 <%= link_to "Reserve all tickets above", :reserve => "yes", :tickets => @tickets %>
+    <%= form_tag url_for(:controller => 'tickets', :action => 'reserveAll'), :method => 'get' do %>
+    <div class="field">
+    Do you want to reserve all above tickets?<br />
+    </div>
+    <%= hidden_field_tag "TripID", :tickets => @ticketsTrip %>
+    <div class="actions">
+      <%= submit_tag "Reserve", :action => 'reserveAll', :controller => 'tickets'%>
+    </div>
+    <% end %>
 

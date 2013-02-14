@@ -11,59 +11,49 @@
     <th></th>
     <th></th>
   </tr>
-<% trip = @tickets.first.trip %>
 <% prevTicket = Ticket.new %> <!-- previous ticket to be able to show all free seats in index -->
 <% tripTickets = Array.new %> <!-- array of free seats -->
-<% @tickets.each do |ticket2| %>
-<% logger.debug(ticket2.cityFrom) %>
-  <% if ticket2.trip != trip && prevTicket.cityFrom != nil %>
-  <% logger.debug(tripTickets) %>
+<% @tickets.each_cons(2) do |ticket,ticket2| %>
+  <% if ticket.trip != ticket2.trip %>
     <tr>
-      <td><%= prevTicket.cityFrom %></td>
-      <td><%= prevTicket.cityTo %></td>
-      <td><%= prevTicket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <td><%= prevTicket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <% if prevTicket.bus_id != nil %>
-      <td><%= link_to Bus.find(prevTicket.bus_id).nameOfBus, bus_path(Bus.find(prevTicket.bus_id))  %></td>
-      <td><%= select_tag("Seat number", options_for_select(tripTickets.collect{ |u| [u] }))%></td>
-      <% end %>
-      <% if current_user.admin? %>
-        <td><%= link_to 'Show', prevTicket %></td>
-        <td><%= link_to 'Edit', edit_ticket_path(prevTicket) %></td>
-        <td><%= button_to 'Destroy', prevTicket, :confirm => 'Are you sure?', :method => :delete %></td>
-      <% end %>
-      <% if prevTicket.user_reserved_id == 0 %>
-      <td><%= button_to 'Reserve', reserve_ticket_path(prevTicket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
-      <% else %>
-      <td><%= button_to 'Unreserve', unreserve_ticket_path(prevTicket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
+      <td><%= ticket.cityFrom %></td>
+      <td><%= ticket.cityTo %></td>
+      <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if ticket.bus_id != nil %>
+      <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+      <td><%= form_tag url_for(:controller => 'tickets', :action => 'reserve'), :method => 'get' do %>
+        <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+        <%= hidden_field_tag "TripID", ticket.trip %></td>
+      <td><%= submit_tag "Reserve", :action => 'reserve', :controller => 'tickets'%></td>
+        <% end %>
       <% end %>
     </tr>
     <% tripTickets.clear %> <!-- When all tickets from same trip have been found we clear array of seats -->
   <% end %>
-  <% if ticket2.trip != trip && prevTicket.cityFrom == nil %>
-  <tr>
+  <%
+  if ticket.trip != ticket2.trip && ticket2 == @tickets[@tickets.count-1]
+  tripTickets.push(ticket2.nameOfSeat.to_i)
+  %>
+    <tr>
       <td><%= ticket2.cityFrom %></td>
       <td><%= ticket2.cityTo %></td>
       <td><%= ticket2.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
       <td><%= ticket2.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
       <% if ticket2.bus_id != nil %>
       <td><%= link_to Bus.find(ticket2.bus_id).nameOfBus, bus_path(Bus.find(ticket2.bus_id))  %></td>
-      <td><%= ticket2.nameOfSeat %></td>
-      <% end %>
-      <% if current_user.admin? %>
-        <td><%= link_to 'Show', ticket2 %></td>
-        <td><%= link_to 'Edit', edit_ticket_path(ticket2) %></td>
-        <td><%= button_to 'Destroy', ticket2, :confirm => 'Are you sure?', :method => :delete %></td>
-      <% end %>
-      <% if ticket2.user_reserved_id == 0 %>
-      <td><%= button_to 'Reserve', reserve_ticket_path(ticket2), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
-      <% else %>
-      <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket2), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
+      <td><%= form_tag url_for(:controller => 'tickets', :action => 'reserve'), :method => 'get' do %>
+        <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+        <%= hidden_field_tag "TripID", ticket2.trip %></td>
+      <td><%= submit_tag "Reserve", :action => 'reserve', :controller => 'tickets'%></td>
+        <% end %>
       <% end %>
     </tr>
   <% end %>
+  <% if ticket == @tickets[0] %>
+    <% tripTickets.push(ticket.nameOfSeat.to_i) %>
+  <% end %>
   <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
-  <% prevTicket = ticket2 %>
   <% trip = ticket2.trip %>
 <% end %>
 </table>

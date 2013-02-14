@@ -7,6 +7,8 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
   validates :endOfTrip, :presence   => true
   validates :nameOfSeat,:presence   => true
   validates :trip,      :presence   => true
+  validates_datetime :dateOfTrip
+  validates_datetime :endOfTrip
   belongs_to :user
   belongs_to :bus
 

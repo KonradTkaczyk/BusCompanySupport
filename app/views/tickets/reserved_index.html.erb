@@ -1,5 +1,82 @@
 <h1>My reserved tickets</h1>
 
-<%= render 'index' %>
+<table>
+  <tr>
+    <th><%= sortable "cityFrom" %></th>
+    <th><%= sortable "cityTo" %></th>
+    <th><%= sortable "dateOfTrip" %></th>
+    <th><%= sortable "endOfTrip" %></th>
+    <th><%= sortable "bus_id" %></th>
+    <th>Seat number</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+<% prevTicket = Ticket.new %> <!-- previous ticket to be able to show all free seats in index -->
+<% tripTickets = Array.new %> <!-- array of free seats -->
+<% if @tickets.length > 1 %>
+  <% @tickets.each_cons(2) do |ticket,ticket2| %>
+    <% if ticket == @tickets[0] %>
+      <% tripTickets.push(ticket.nameOfSeat.to_i) %>
+    <% end %>
+    <% if ticket.trip != ticket2.trip || ticket2.nil? %>
+      <tr>
+        <td><%= ticket.cityFrom %></td>
+        <td><%= ticket.cityTo %></td>
+        <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+        <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+        <% if ticket.bus_id != nil %>
+        <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+        <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
+          <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+          <%= hidden_field_tag "TripID", ticket.trip %></td>
+        <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+          <% end %>
+        <% end %>
+      </tr>
+      <% tripTickets.clear %> <!-- When all tickets from same trip have been found we clear array of seats -->
+    <% end %>
+    <% if ticket.trip != ticket2.trip && ticket2 == @tickets[@tickets.count-1] %>
+    <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
+      <tr>
+        <td><%= ticket2.cityFrom %></td>
+        <td><%= ticket2.cityTo %></td>
+        <td><%= ticket2.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+        <td><%= ticket2.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+        <% if ticket2.bus_id != nil %>
+        <td><%= link_to Bus.find(ticket2.bus_id).nameOfBus, bus_path(Bus.find(ticket2.bus_id))  %></td>
+        <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
+          <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+          <%= hidden_field_tag "TripID", ticket2.trip %></td>
+        <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+    <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
+    <% trip = ticket2.trip %>
+  <% end %>
+<% else %>
+  <% @tickets.each do |ticket| %>
+  <% tripTickets.push(ticket.nameOfSeat.to_i) %>
+    <tr>
+      <td><%= ticket.cityFrom %></td>
+      <td><%= ticket.cityTo %></td>
+      <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if ticket.bus_id != nil %>
+      <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+      <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
+        <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+        <%= hidden_field_tag "TripID", ticket.trip %></td>
+      <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+<% end %>
+</table>
+<br />
 <%= link_to 'Back', root_path %>
 

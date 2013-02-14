@@ -4,7 +4,14 @@ class TicketsController < ApplicationController
    before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
 
   def reserved_index
-    @tickets = Ticket.where(:user_reserved_id => current_user.id).paginate(:page => params[:page])
+    @tickets = Ticket.where(:user_reserved_id => current_user.id)
+    logger.debug(@tickets.first.cityFrom)
+    logger.debug(@tickets.first.cityTo)
+    logger.debug(@tickets.first.trip)
+    logger.debug(@tickets.length)
+    logger.debug(@tickets.last.cityFrom)
+    logger.debug(@tickets.last.cityTo)
+    logger.debug(@tickets.last.trip)
     respond_to do |format|
       format.html # reserved_index.html.erb
       format.xml  { render :xml => @tickets }
@@ -55,6 +62,8 @@ class TicketsController < ApplicationController
           puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
           shortest = Array.new(path.map {|vertex| vertex.name})
           @tickets = Ticket.tickets_for_shortest_path(shortest)
+          @ticketsTrip = Array.new
+          @tickets.collect{ |ticket| @ticketsTrip.push(ticket.trip)}
           respond_to do |format|
             format.html { render :shortest_path }
             format.xml  { render :xml => @tickets }
@@ -67,27 +76,28 @@ class TicketsController < ApplicationController
           format.xml  { render :xml => @tickets }
         end
       end
-    elsif params[:reserve] == 'yes'
-      @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
-      @tickets = Ticket.find(params[:tickets])
-      if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
-        @tickets.each do |ticket|
-          if ticket.user_reserved_id == 0
-            ticket.user_reserved_id = current_user.id
-            ticket.save
-          end
-        end
-        respond_to do |format|
-          format.html { redirect_to(reserved_index_ticket_path) }
-          format.xml  { head :ok }
-        end
-      else
-        flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
-        redirect_to tickets_path
-      end
     end
   end
 
+  def reserveAll
+    @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
+    @tickets = Ticket.find(params[:tickets])
+    if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
+      @tickets.each do |ticket|
+        if ticket.user_reserved_id == 0
+          ticket.user_reserved_id = current_user.id
+          ticket.save
+        end
+      end
+      respond_to do |format|
+        format.html { redirect_to(reserved_index_ticket_path) }
+        format.xml  { head :ok }
+      end
+    else
+      flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
+      redirect_to tickets_path
+    end
+  end
   # GET /tickets/1
   # GET /tickets/1.xml
   def show
@@ -100,12 +110,9 @@ class TicketsController < ApplicationController
   end
 
   def reserve
-    logger.debug("***********************")
-    logger.debug(params)
-    logger.debug("***********************")
     @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
     if(@userTickets.length <= 10)
-      @ticket = Ticket.find(params[:id])
+      @ticket = Ticket.where("trip = ? AND nameOfSeat = ?", params[:TripID],params[:SeatNumber]).first
       @ticket.user_reserved_id = current_user.id
       @ticket.save
       respond_to do |format|
@@ -119,7 +126,7 @@ class TicketsController < ApplicationController
   end
 
   def unreserve
-    @ticket = Ticket.find(params[:id])
+    @ticket = Ticket.where("trip = ? AND nameOfSeat = ?", params[:TripID],params[:SeatNumber]).first
     if @ticket.user_reserved_id != current_user.id
       flash[:error] = "You cannot unreserve a ticket which you did not reserve!"
       redirect_to tickets_path
@@ -164,6 +171,7 @@ class TicketsController < ApplicationController
                              params[:ticket]["dateOfTrip(3i)"].to_i,
                              params[:ticket]["dateOfTrip(4i)"].to_i,
                              params[:ticket]["dateOfTrip(5i)"].to_i)
+    logger.debug(startTime)
     endTime = DateTime.new(params[:ticket]["endOfTrip(1i)"].to_i,
                              params[:ticket]["endOfTrip(2i)"].to_i,
                              params[:ticket]["endOfTrip(3i)"].to_i,
@@ -173,10 +181,12 @@ class TicketsController < ApplicationController
     @tickets = Ticket.where("dateOfTrip > ? AND endOfTrip < ? AND bus_id = ? AND endOfTrip > ? AND dateOfTrip < ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id], startTime, endTime)
     if (endTime > startTime && @tickets.length == 0)
       n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
+      m = Ticket.maximum("trip") + 1
       (1..n).each do |i|
         @ticket = current_user.tickets.build(params[:ticket])
         @ticket.user_reserved_id = 0
         @ticket.nameOfSeat = i
+        @ticket.trip = m
         if !@ticket.save
           respond_to do |format|
             format.html { render :action => "new" }
