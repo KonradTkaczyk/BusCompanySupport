@@ -19,12 +19,11 @@
     <th></th>
     <th></th>
   </tr>
+  <% seats = [1,2,3,4,5,6,7,8,9,10] %>
   <% i = 0 %>
 <% tripTickets = Array.new %> <!-- array of free seats -->
 <% @tickets.each_cons(2) do |ticket,ticket2| %>
   <% if ticket.trip != ticket2.trip %>
-  <% div = "<ul  id=\"place" + i.to_s + "\" class=\"place\">"%>
-  <% i = i + 1%>
     <tr>
       <td><%= ticket.cityFrom %></td>
       <td><%= ticket.cityTo %></td>
@@ -33,16 +32,16 @@
       <% if ticket.bus_id != nil %>
       <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
       <% end %>
-      <td><%= hidden_field_tag "TripID", tripTickets %></td>
+      <td><%= seats - tripTickets %></td>
       <% logger.debug(tripTickets)%>
       <td><div id="holder">
-          <%= div.html_safe %>
+          <ul  id="place" class="place"> <!-- Place to put seats for reservation -->
           </ul>
       </div>
       <div style="float:left;">
       <ul id="seatDescription">
           <li style="background:url('/images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
-          <li style="background:url('/images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Booked Seat</li>
+          <li style="background:url('/images/reserved_seat_img.gif') no-repeat scroll 0 0 transparent;">Reserved Seat</li>
           <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
       </ul>
       </div>

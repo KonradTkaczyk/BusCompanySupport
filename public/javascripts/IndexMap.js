@@ -30,7 +30,11 @@ function init()
 	if ($('#FoundTickets').length)
 	{
 		ShortestPath();
-		reservedSeat();
+		($('tr').each(function(i,row)
+		{
+			console.log(row);
+			SeatReservation(row);
+		}));
 	}
 }
 
@@ -98,7 +102,6 @@ function ShortestPath()
 		locations.push(marker(cities[arr[i]],root + "/images/marker.png"));//coordination points to draw lines
 	}
 	lines(locations);
-	console.log(root);
 }
 
 function marker(locationPlace, iconAdress)
@@ -112,7 +115,7 @@ function marker(locationPlace, iconAdress)
   return location;
 }
 
-function reservedSeat()
+function SeatReservation(row)
 {
 var settings = {
                rows: 2,
@@ -122,9 +125,14 @@ var settings = {
                seatWidth: 40,
                seatHeight: 40,
                seatCss: 'seat',
-               selectedSeatCss: 'selectedSeat',
+               selectedSeatCss: 'reservedSeat',
                selectingSeatCss: 'selectingSeat'
            		 };
+           		 	var reservedSeat = $(row).find("td").eq(5).text();
+           		 	if(reservedSeat != null)
+           		 	{
+									reservedSeat;
+           		 	}
                 var str = [], seatNo, className;
                 for (i = 0; i < settings.rows; i++)
                 {
@@ -142,7 +150,7 @@ var settings = {
                                   '</li>');
                     }
                 }
-                $('.place').each(function() { $(this).html(str.join(''))});
+                $(row).find('#place').html(str.join(''));
 $('.' + settings.seatCss).click(function () {
 if ($(this).hasClass(settings.selectedSeatCss)){
     alert('This seat is already reserved');

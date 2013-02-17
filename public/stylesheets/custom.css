@@ -281,9 +281,9 @@ th .desc:after {
 	width:33px;
 	display:block;
 }
-.place .selectedSeat
+.place .reservedSeat
 {
-	background-image:url("/images/booked_seat_img.gif");
+	background-image:url("/images/reserved_seat_img.gif");
 }
 .place .selectingSeat
 {
