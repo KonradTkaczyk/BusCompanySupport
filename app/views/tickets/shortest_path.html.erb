@@ -19,45 +19,67 @@
     <th></th>
     <th></th>
   </tr>
-
-<% @tickets.each do |ticket| %>
-  <tr>
-    <td><%= ticket.cityFrom %></td>
-    <td><%= ticket.cityTo %></td>
-    <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <% if ticket.bus_id != nil %>
-    <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
-    <td><%= ticket.nameOfSeat %></td>
-    <% end %>
-    <% if current_user.admin? %>
-      <td><%= link_to 'Show', ticket %></td>
-      <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
-      <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
-    <% else %>
-      <% if ticket.user_reserved_id == 0 %>
-
-      <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
-      <% else %>
-      <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
+  <% i = 0 %>
+<% tripTickets = Array.new %> <!-- array of free seats -->
+<% @tickets.each_cons(2) do |ticket,ticket2| %>
+  <% if ticket.trip != ticket2.trip %>
+  <% div = "<ul  id=\"place" + i.to_s + "\" class=\"place\">"%>
+  <% i = i + 1%>
+    <tr>
+      <td><%= ticket.cityFrom %></td>
+      <td><%= ticket.cityTo %></td>
+      <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if ticket.bus_id != nil %>
+      <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
       <% end %>
-    <% end %>
-  </tr>
+      <td><%= hidden_field_tag "TripID", tripTickets %></td>
+      <% logger.debug(tripTickets)%>
+      <td><div id="holder">
+          <%= div.html_safe %>
+          </ul>
+      </div>
+      <div style="float:left;">
+      <ul id="seatDescription">
+          <li style="background:url('/images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
+          <li style="background:url('/images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Booked Seat</li>
+          <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
+      </ul>
+      </div>
+          <div style="clear:both;width:100%">
+          <input type="button" id="btnShowNew" value="Show Selected Seats" />
+          <input type="button" id="btnShow" value="Show All" />
+          </div></td>
+
+    </tr>
+    <% tripTickets.clear %>
+  <%end%>
+  <%if ticket.trip != ticket2.trip && ticket2 == @tickets[@tickets.count-1]%>
+  <%tripTickets.push(ticket2.nameOfSeat.to_i)%>
+    <tr>
+      <td><%= ticket2.cityFrom %></td>
+      <td><%= ticket2.cityTo %></td>
+      <td><%= ticket2.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket2.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if ticket2.bus_id != nil %>
+      <td><%= link_to Bus.find(ticket2.bus_id).nameOfBus, bus_path(Bus.find(ticket2.bus_id))  %></td>
+      <td><%= form_tag url_for(:controller => 'tickets', :action => 'reserve'), :method => 'get' do %>
+        <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+        <%= hidden_field_tag "TripID", tripTickets %></td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+  <% if ticket == @tickets[0] %>
+    <% tripTickets.push(ticket.nameOfSeat.to_i) %>
+  <% end %>
+  <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
+  <% trip = ticket2.trip %>
 <% end %>
 </table>
 <br />
 <% if @tickets == nil %>
-Sorry no possible route have been found.
+  Sorry no possible route have been found.
 <% end %>
 <br />
-<%= link_to "Reserve all tickets above", :reserve => "yes", :tickets => @tickets %>
-    <%= form_tag url_for(:controller => 'tickets', :action => 'reserveAll'), :method => 'get' do %>
-    <div class="field">
-    Do you want to reserve all above tickets?<br />
-    </div>
-    <%= hidden_field_tag "TripID", :tickets => @ticketsTrip %>
-    <div class="actions">
-      <%= submit_tag "Reserve", :action => 'reserveAll', :controller => 'tickets'%>
-    </div>
-    <% end %>
 

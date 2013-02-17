@@ -104,7 +104,7 @@ def make_tickets (admin)
       admin.tickets.create!(:dateOfTrip => time + 2.days + m.days + 13.hours, :endOfTrip => time + 2.days + m.days + 17.hours, :bus_id => 8, :cityFrom => "Warsaw", :cityTo => "Cracow", :nameOfSeat => "#{n+1}", :trip => "#{m*23+17}")
     end
     10.times do |n|
-      admin.tickets.create!(:dateOfTrip => time + 2.days + m.days + 18.hours, :endOfTrip => time + 2.days + m.days + 20.hours, :bus_id => 8, :cityFrom => "Cracow", :cityTo => "Katowice", :nameOfSeat => "#{n+1}", :trip => "#{m*23+18}")
+      admin.tickets.create!(:dateOfTrip => time + 2.days + m.days + 18.hours, :endOfTrip => time + 2.days + m.days + 20.hours, :bus_id => 8, :cityFrom => "Cracow", :cityTo => "Wroclaw", :nameOfSeat => "#{n+1}", :trip => "#{m*23+18}")
     end
     10.times do |n|
       admin.tickets.create!(:dateOfTrip => time + 2.days + m.days + 18.hours, :endOfTrip => time + 2.days + m.days + 22.hours, :bus_id => 9, :cityFrom => "Cracow", :cityTo => "Rzeszow", :nameOfSeat => "#{n+1}", :trip => "#{m*23+19}")
@@ -121,7 +121,6 @@ def make_tickets (admin)
     10.times do |n|
       admin.tickets.create!(:dateOfTrip => time + 2.days + m.days + 18.hours, :endOfTrip => time + 2.days + m.days + 20.hours, :bus_id => 10, :cityFrom => "Radom", :cityTo => "Warsaw", :nameOfSeat => "#{n+1}", :trip => "#{m*23+23}")
     end
-
   end
 end
 

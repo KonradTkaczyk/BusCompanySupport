@@ -1,11 +1,17 @@
 	var map, baseLayer, markers, lineLayer;
   var cities = new Object();
-  cities['Radom'] = "21.15, 51.40";
-  cities['Gdansk'] = "18.633333,54.366667";
-  cities['Olsztyn'] = "20.55,53.783333";
-  cities['Szczecin'] = "14.542222, 53.438056";
-  cities['Ciechanow'] = "20.608056,52.876111";
-  cities['Warsaw'] = "21.008333, 52.232222";
+  cities['Radom'] = "51.40, 21.15";
+  cities['Gdansk'] = "54.366667, 18.633333";
+  cities['Olsztyn'] = "53.783333, 20.55";
+  cities['Szczecin'] = "53.438056, 14.542222";
+  cities['Ciechanow'] = "52.876111, 20.608056";
+  cities['Opole'] = "50.664722, 17.926944";
+  cities['Wroclaw'] = "51.11, 17.022222";
+  cities['Cracow'] = "50.061389, 19.938333";
+  cities['Katowice'] = "50.25, 19";
+  cities['Rzeszow'] = "50.033611, 22.004722";
+  cities['Lublin'] = "51.248056, 22.570278";
+  cities['Warsaw'] = "52.232222, 21.008333";
   var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
   var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
   var root = location.protocol + '//' + location.host;
@@ -24,6 +30,7 @@ function init()
 	if ($('#FoundTickets').length)
 	{
 		ShortestPath();
+		reservedSeat();
 	}
 }
 
@@ -96,13 +103,72 @@ function ShortestPath()
 
 function marker(locationPlace, iconAdress)
 {
-	var parse = locationPlace.split(',');
-  var location = new OpenLayers.LonLat(parse[0],parse[1]).transform( fromProjection, toProjection);
+	var parser = locationPlace.split(',');
+  var location = new OpenLayers.LonLat(parser[1],parser[0]).transform( fromProjection, toProjection);
   var size = new OpenLayers.Size(21,25);
   var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
   var icon = new OpenLayers.Icon(iconAdress,size,offset);
   markers.addMarker(new OpenLayers.Marker(location,icon.clone()));
   return location;
+}
+
+function reservedSeat()
+{
+var settings = {
+               rows: 2,
+               cols: 5,
+               rowCssPrefix: 'row-',
+               colCssPrefix: 'col-',
+               seatWidth: 40,
+               seatHeight: 40,
+               seatCss: 'seat',
+               selectedSeatCss: 'selectedSeat',
+               selectingSeatCss: 'selectingSeat'
+           		 }
+                var str = [], seatNo, className;
+                for (i = 0; i < settings.rows; i++)
+                {
+                    for (j = 0; j < settings.cols; j++)
+                    {
+                        seatNo = (i + j * settings.rows + 1);
+                        className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+                        if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1)
+                        {
+                            className += ' ' + settings.selectedSeatCss;
+                        }
+                        str.push('<li class="' + className + '"' +
+                                  'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
+                                  '<a title="' + seatNo + '">' + seatNo + '</a>' +
+                                  '</li>');
+                    }
+                }
+                $('#place0').html(str.join(''));
+                $('#place1').html(str.join(''));
+$('.' + settings.seatCss).click(function () {
+if ($(this).hasClass(settings.selectedSeatCss)){
+    alert('This seat is already reserved');
+}
+else{
+    $(this).toggleClass(settings.selectingSeatCss);
+    }
+});
+
+$('#btnShow').click(function () {
+    var str = [];
+    $.each($('#place li.' + settings.selectedSeatCss + ' a, #place li.'+ settings.selectingSeatCss + ' a'), function (index, value) {
+        str.push($(this).attr('title'));
+    });
+    alert(str.join(','));
+})
+
+$('#btnShowNew').click(function () {
+    var str = [], item;
+    $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+        item = $(this).attr('title');
+        str.push(item);
+    });
+    alert(str.join(','));
+})
 }
 window.onload = init;
 

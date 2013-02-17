@@ -1,3 +1,4 @@
+<%= will_paginate %>
 <table>
   <tr>
     <th><%= sortable "cityFrom" %></th>
@@ -11,7 +12,6 @@
     <th></th>
     <th></th>
   </tr>
-<% prevTicket = Ticket.new %> <!-- previous ticket to be able to show all free seats in index -->
 <% tripTickets = Array.new %> <!-- array of free seats -->
 <% @tickets.each_cons(2) do |ticket,ticket2| %>
   <% if ticket.trip != ticket2.trip %>

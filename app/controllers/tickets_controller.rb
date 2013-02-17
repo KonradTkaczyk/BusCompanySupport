@@ -5,13 +5,6 @@ class TicketsController < ApplicationController
 
   def reserved_index
     @tickets = Ticket.where(:user_reserved_id => current_user.id)
-    logger.debug(@tickets.first.cityFrom)
-    logger.debug(@tickets.first.cityTo)
-    logger.debug(@tickets.first.trip)
-    logger.debug(@tickets.length)
-    logger.debug(@tickets.last.cityFrom)
-    logger.debug(@tickets.last.cityTo)
-    logger.debug(@tickets.last.trip)
     respond_to do |format|
       format.html # reserved_index.html.erb
       format.xml  { render :xml => @tickets }
@@ -19,7 +12,7 @@ class TicketsController < ApplicationController
   end
 
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction)
+    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page], :per_page => 200)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tickets }
@@ -62,6 +55,14 @@ class TicketsController < ApplicationController
           puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
           shortest = Array.new(path.map {|vertex| vertex.name})
           @tickets = Ticket.tickets_for_shortest_path(shortest)
+          if @tickets == nil
+            flash[:error] = "No route has been found"
+            respond_to do |format|
+              format.html { redirect_to(tickets_path) }
+              format.xml  { head :ok }
+            end
+            return
+          end
           @ticketsTrip = Array.new
           @tickets.collect{ |ticket| @ticketsTrip.push(ticket.trip)}
           respond_to do |format|

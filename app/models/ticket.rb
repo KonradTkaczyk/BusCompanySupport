@@ -27,19 +27,19 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
     endoftrip = Time.now #starting time to search the tickets, then used as variable to find tickets after previous ticket ends so all tickets can line up in time.
     ticketsOfShortestPath = Array.new()
     while !shortest[i+1].nil?
-      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",endoftrip, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").limit(1)
-      if(ticket2.length == 0)
+      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",endoftrip, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").first
+      if (ticket2 == nil)
         return nil
       end
-      ticket2.each do |ticket|
-        endoftrip = ticket.endOfTrip
-        ticketsOfShortestPath.push(ticket)
-        i = i + 1
+      endoftrip = ticket2.endOfTrip
+      @ticket = Ticket.where("user_reserved_id = 0 AND trip = ?",ticket2.trip)#Find all tickets from same trip
+      @ticket.each do |x|
+        ticketsOfShortestPath.push(x)
       end
+      i = i + 1
     end
     return ticketsOfShortestPath
   end
-
 end
 
 
