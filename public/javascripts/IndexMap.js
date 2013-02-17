@@ -124,7 +124,7 @@ var settings = {
                seatCss: 'seat',
                selectedSeatCss: 'selectedSeat',
                selectingSeatCss: 'selectingSeat'
-           		 }
+           		 };
                 var str = [], seatNo, className;
                 for (i = 0; i < settings.rows; i++)
                 {
@@ -142,8 +142,7 @@ var settings = {
                                   '</li>');
                     }
                 }
-                $('#place0').html(str.join(''));
-                $('#place1').html(str.join(''));
+                $('.place').each(function() { $(this).html(str.join(''))});
 $('.' + settings.seatCss).click(function () {
 if ($(this).hasClass(settings.selectedSeatCss)){
     alert('This seat is already reserved');
