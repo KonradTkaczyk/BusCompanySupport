@@ -36,8 +36,7 @@
         <% end %>
       </tr>
       <% tripTickets.clear %> <!-- When all tickets from same trip have been found we clear array of seats -->
-    <% end %>
-    <% if ticket.trip != ticket2.trip && ticket2 == @tickets[@tickets.count-1] %>
+    <% elsif ticket.trip != ticket2.trip || ticket2 == @tickets.last %>
     <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
       <tr>
         <td><%= ticket2.cityFrom %></td>

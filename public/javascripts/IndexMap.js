@@ -131,7 +131,7 @@ var settings = {
            		 	var reservedSeat = $(row).find("td").eq(5).text();
            		 	if(reservedSeat != null)
            		 	{
-									reservedSeat;
+									reservedSeat = $(row).find('#Seat').data('seats');
            		 	}
                 var str = [], seatNo, className;
                 for (i = 0; i < settings.rows; i++)
