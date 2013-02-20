@@ -30,11 +30,8 @@ function init()
 	if ($('#FoundTickets').length)
 	{
 		ShortestPath();
-		($('tr').each(function(i,row)
-		{
-			console.log(row);
-			SeatReservation(row);
-		}));
+		SeatReservation();
+		events();
 	}
 }
 
@@ -115,8 +112,7 @@ function marker(locationPlace, iconAdress)
   return location;
 }
 
-function SeatReservation(row)
-{
+
 var settings = {
                rows: 2,
                cols: 5,
@@ -128,54 +124,60 @@ var settings = {
                selectedSeatCss: 'reservedSeat',
                selectingSeatCss: 'selectingSeat'
            		 };
-           		 	var reservedSeat = $(row).find("td").eq(5).text();
-           		 	if(reservedSeat != null)
-           		 	{
-									reservedSeat = $(row).find('#Seat').data('seats');
-           		 	}
-                var str = [], seatNo, className;
-                for (i = 0; i < settings.rows; i++)
-                {
-                    for (j = 0; j < settings.cols; j++)
-                    {
-                        seatNo = (i + j * settings.rows + 1);
-                        className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
-                        if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1)
-                        {
-                            className += ' ' + settings.selectedSeatCss;
-                        }
-                        str.push('<li class="' + className + '"' +
-                                  'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
-                                  '<a title="' + seatNo + '">' + seatNo + '</a>' +
-                                  '</li>');
-                    }
-                }
-                $(row).find('#place').html(str.join(''));
-$('.' + settings.seatCss).click(function () {
-if ($(this).hasClass(settings.selectedSeatCss)){
-    alert('This seat is already reserved');
+
+function SeatReservation()
+{
+	($('tr').each(function(x,row)
+	{
+		reservedSeat = $(row).find('#Seat').data('seats');
+		var str = [], seatNo, className;
+		for (i = 0; i < settings.rows; i++)
+		{
+			for (j = 0; j < settings.cols; j++)
+			{
+				seatNo = (i + j * settings.rows + 1);
+				className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+				if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1)
+				{
+				    className += ' ' + settings.selectedSeatCss;
+				}
+				str.push('<li class="' + className + '"' + 'style="top:' + (i * settings.seatHeight).toString()
+				+ 'px;left:' + (j * settings.seatWidth).toString() + 'px">' + '<a title="' + seatNo + '">'
+				+ seatNo + '</a>' + '</li>');
+			}
+		}
+		$(row).find('#place').html(str.join(''));
+	}));
 }
-else{
-    $(this).toggleClass(settings.selectingSeatCss);
-    }
-});
 
-$('#btnShow').click(function () {
-    var str = [];
-    $.each($('#place li.' + settings.selectedSeatCss + ' a, #place li.'+ settings.selectingSeatCss + ' a'), function (index, value) {
-        str.push($(this).attr('title'));
-    });
-    alert(str.join(','));
-})
+function events()
+{
+	$('.' + settings.seatCss).click(function () {
+	if ($(this).hasClass(settings.selectedSeatCss)){
+		  alert('This seat is already reserved');
+	}
+	else{
+		  $(this).toggleClass(settings.selectingSeatCss);
+		  }
+	});
 
-$('#btnShowNew').click(function () {
-    var str = [], item;
-    $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
-        item = $(this).attr('title');
-        str.push(item);
-    });
-    alert(str.join(','));
-})
+	$('#btnShow').click(function () {
+		  var str = [];
+		  $.each($('#place li.' + settings.selectedSeatCss + ' a, #place li.'+ settings.selectingSeatCss + ' a'), function (index, value) {
+		      str.push($(this).attr('title'));
+		  });
+		  alert(str.join(','));
+	})
+
+	$('#btnShowNew').click(function () {
+		  var str = [], item;
+
+			$.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+			    item = $(this).attr('title');
+			    str.push(item);
+			});
+	  	alert(str.join(','));
+	})
 }
 window.onload = init;
 
