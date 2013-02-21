@@ -32,7 +32,7 @@
       <% if ticket.bus_id != nil %>
       <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
       <% end %>
-      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripId:(ticket.trip)} do %>
+      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket.trip)} do %>
       <% end %></td>
       <% logger.debug(tripTickets)%>
       <td><div id="holder">
@@ -63,7 +63,7 @@
       <% if ticket2.bus_id != nil %>
       <td><%= link_to Bus.find(ticket2.bus_id).nameOfBus, bus_path(Bus.find(ticket2.bus_id))  %></td>
       <% end %>
-      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripId:(ticket2.trip)} do %>
+      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket2.trip)} do %>
       <% end %></td>
       <% logger.debug(tripTickets)%>
       <td><div id="holder">

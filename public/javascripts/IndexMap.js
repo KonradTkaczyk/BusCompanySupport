@@ -171,12 +171,24 @@ function events()
 
 	$('#btnShowNew').click(function () {
 		  var str = [], item;
-
-			$.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
-			    item = $(this).attr('title');
+		  var ReservingTrip = [],  ArrayOfTrips= [];
+			($('tr').each(function(x,row)
+			{
+				tripid = $(row).find('#Seat').data('tripid');
+				ReservingTrip['tripId'] = tripid
+				$(row).find('#place li.' + settings.selectingSeatCss + ' a').each(function(i,j)
+				{
+					alert("bla"+i+"ala"+$(j).attr('title')+'tripid:'+tripid);
+					ReservingTrip.push($(j).attr('title'));
+				});
+				ArrayOfTrips.push(ReservingTrip);
+				ReservingTrip = [];
+			}));
+			$("tr").find('#place li.' + settings.selectingSeatCss + ' a').each(function() {
+					item = $(this).attr('title');
 			    str.push(item);
 			});
-	  	alert(str.join(','));
+			alert(str.join(','));
 	})
 }
 window.onload = init;
