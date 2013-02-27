@@ -169,26 +169,42 @@ function events()
 		  alert(str.join(','));
 	})
 
-	$('#btnShowNew').click(function () {
+	$('#Reserve').click(function () {
 		  var str = [], item;
 		  var ReservingTrip = [],  ArrayOfTrips= [];
 			($('tr').each(function(x,row)
 			{
 				tripid = $(row).find('#Seat').data('tripid');
-				ReservingTrip['tripId'] = tripid
+				ReservingTrip.push(tripid);
 				$(row).find('#place li.' + settings.selectingSeatCss + ' a').each(function(i,j)
 				{
 					alert("bla"+i+"ala"+$(j).attr('title')+'tripid:'+tripid);
-					ReservingTrip.push($(j).attr('title'));
+					ReservingTrip.push(parseInt($(j).attr('title')));
 				});
 				ArrayOfTrips.push(ReservingTrip);
 				ReservingTrip = [];
 			}));
-			$("tr").find('#place li.' + settings.selectingSeatCss + ' a').each(function() {
-					item = $(this).attr('title');
-			    str.push(item);
-			});
-			alert(str.join(','));
+			ArrayOfTrips.splice(0,1);
+			$.ajax({
+		    type: "GET",
+		    url: "/ticket/reserveAll",
+		    data: {ArrayOfTrips: JSON.stringify(ArrayOfTrips)},	//sends array of trips to Rails server in format
+		    																										// [[tripId1,seat no1,seat no2...][tripId2,seat no1...]...]
+		    success: function(response)
+		    {
+					text = JSON.stringify(response);
+		    	if(text.indexOf("success") >= 0)
+		    	{
+		    		alert("Tickets reserved!");
+		    		$('table').fadeOut(1000);
+		    	}
+		    	else
+		    	{
+		    		alert("Failed to reserve tickets!");
+		    	}
+		    },
+		    failure: function() { alert("Failure!"); }
+      });
 	})
 }
 window.onload = init;

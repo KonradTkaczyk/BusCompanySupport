@@ -1,3 +1,5 @@
+require 'json'
+
 class TicketsController < ApplicationController
 
    before_filter :authenticate
@@ -64,7 +66,7 @@ class TicketsController < ApplicationController
             return
           end
           @ticketsTrip = Array.new
-          @tickets.collect{ |ticket| @ticketsTrip.push(ticket.trip)}
+          @tickets.collect{ |ticket| @ticketsTrip.push(ticket.trip)} #tickets found are pushed to array which will be presented in results page
           respond_to do |format|
             format.html { render :shortest_path }
             format.xml  { render :xml => @tickets }
@@ -81,22 +83,40 @@ class TicketsController < ApplicationController
   end
 
   def reserveAll
+    arrayOfTrips = JSON.parse(params[:ArrayOfTrips])
+    logger.debug(arrayOfTrips)
+    trips = Array.new()
+    arrayOfTrips.collect{ |trip| trips.push(trip.first)} #array of trips which is used to find all trip tickets
     @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
-    @tickets = Ticket.find(params[:tickets])
-    if(@userTickets.length <= 10 && 10 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
-      @tickets.each do |ticket|
-        if ticket.user_reserved_id == 0
-          ticket.user_reserved_id = current_user.id
-          ticket.save
+    @tickets = Ticket.where(:trip => trips)
+    logger.debug(@tickets.length)
+    if(@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
+      arrayOfTrips.each do |x| #go through all arrays with seats sended via AJAX
+        logger.debug("----+++---")
+        if(x.length>=2) #all arrays which have seats as they are from second element of the array
+          tripid = nil
+          x.each_with_index do |y,index| #go through all tickets for one trip, first element of array is trip ID
+            if(index == 0)
+              logger.debug("--")
+              tripid = y
+            else
+              logger.debug("-------")
+              ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND nameOfSeat = ?",tripid,y).first
+              ticket.user_reserved_id = current_user.id
+              ticket.save
+            end
+          end
         end
       end
+      #ticket.user_reserved_id = current_user.id
+      #ticket.save
       respond_to do |format|
-        format.html { redirect_to(reserved_index_ticket_path) }
-        format.xml  { head :ok }
+        format.json { render :json => { :result => 'success'} }
       end
     else
-      flash[:error] = "You cannot have more than 10 reserved tickets at once - no reservations done"
-      redirect_to tickets_path
+      respond_to do |format|
+        format.json { render :json => { :result => 'failure'} }
+      end
     end
   end
   # GET /tickets/1
@@ -111,6 +131,7 @@ class TicketsController < ApplicationController
   end
 
   def reserve
+    logger.debug(params)
     @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
     if(@userTickets.length <= 10)
       @ticket = Ticket.where("trip = ? AND nameOfSeat = ?", params[:TripID],params[:SeatNumber]).first

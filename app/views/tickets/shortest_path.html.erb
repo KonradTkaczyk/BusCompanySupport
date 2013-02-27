@@ -32,7 +32,7 @@
       <% if ticket.bus_id != nil %>
       <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
       <% end %>
-      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket.trip)} do %>
+      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket.trip)} do %> <!-- tag to hold seats that are already reserved -->
       <% end %></td>
       <% logger.debug(tripTickets)%>
       <td><div id="holder">
@@ -46,11 +46,6 @@
           <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
       </ul>
       </div>
-          <div style="clear:both;width:100%">
-          <input type="button" id="btnShowNew" value="Show Selected Seats" />
-          <input type="button" id="btnShow" value="Show All" />
-          </div></td>
-
     </tr>
     <% tripTickets.clear %>
   <%elsif ticket.trip != ticket2.trip || ticket2 == @tickets.last%>
@@ -77,11 +72,6 @@
           <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
       </ul>
       </div>
-          <div style="clear:both;width:100%">
-          <input type="button" id="btnShowNew" value="Show Selected Seats" />
-          <input type="button" id="btnShow" value="Show All" />
-          </div></td>
-
     </tr>
   <% end %>
   <% if ticket == @tickets[0] %>
@@ -95,5 +85,7 @@
 <% if @tickets == nil %>
   Sorry no possible route have been found.
 <% end %>
+<input type="button" id="Reserve" value="Reserve selected seats" />
+<%= link_to("Reserve seats", :url =>"/tickets/reserve", :method=>'get', :update =>'seats', :remote=>true) %>
 <br />
 
