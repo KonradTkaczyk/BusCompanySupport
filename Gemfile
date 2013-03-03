@@ -7,6 +7,7 @@ gem 'sqlite3'
 gem 'jquery-rails'
 gem 'validates_timeliness', '~> 3.0.2'
 gem 'pg'
+gem 'faker', '0.3.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -14,7 +15,6 @@ gem 'pg'
 group :development do
   gem 'rspec-rails', '2.0.1'
   gem 'annotate', '2.4.0'
-  gem 'faker', '0.3.1'
   gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
