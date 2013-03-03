@@ -2,12 +2,12 @@
 
 <p>
   <b>Date of trip:</b>
-  <%= @ticket.dateOfTrip %>
+  <%= @ticket.date_of_trip %>
 </p>
 
 <p>
   <b>End of trip:</b>
-  <%= @ticket.endOfTrip %>
+  <%= @ticket.end_of_trip %>
 </p>
 
 <p>
@@ -21,7 +21,7 @@
 
 <p>
   <b>Bus:</b>
-  <%= link_to Bus.find(@ticket.bus_id).nameOfBus, bus_path(Bus.find(@ticket.bus_id)) %>
+  <%= link_to Bus.find(@ticket.bus_id).name_of_bus, bus_path(Bus.find(@ticket.bus_id)) %>
 </p>
 
 

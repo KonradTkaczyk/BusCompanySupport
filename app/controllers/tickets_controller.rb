@@ -14,7 +14,7 @@ class TicketsController < ApplicationController
   end
 
   def index
-    @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page], :per_page => 200)
+    @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ?", Time.now - 30.minutes).order(sort_column + " " + sort_direction).paginate(:page => params[:page], :per_page => 200)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tickets }
@@ -25,9 +25,9 @@ class TicketsController < ApplicationController
   # GET /tickets.xml
   def search
     if(params.has_key?(:ticket))
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom ILIKE ? AND cityTo ILIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%")
+      @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ? AND city_from LIKE ? AND city_to LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:city_from]}%", "%#{params[:ticket][:city_to]}%")
       if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
-        @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
+        @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ?", Time.now - 30.minutes)
       end
       if @tickets.length != 0
         array = Array.new()
@@ -35,24 +35,24 @@ class TicketsController < ApplicationController
         i = 0
         j = 0
         @tickets.each do |ticket| #adding all tickets data to array to provide to Dijkstra algorithm
-          array.push(ticket.cityFrom)
-          array.push(ticket.cityTo)
+          array.push(ticket.city_from)
+          array.push(ticket.city_to)
           array.push(ticket.cost_of_trip)
           if (!array2.include?(array)) #adding only paths that are not in array already
             array2.push(Array.new(array))
           end
           array.clear
-          if ticket.cityFrom == params[:ticket][:cityFrom]
+          if ticket.city_from == params[:ticket][:city_from]
             i = i + 1
           end
-          if ticket.cityTo == params[:ticket][:cityTo]
+          if ticket.city_to == params[:ticket][:city_to]
             j = j + 1
           end
         end
         if i > 0 and j > 0
           g = TicketsHelper::Graph.new (array2)
-          start = g.vertices[params[:ticket][:cityFrom]]
-          stop  = g.vertices[params[:ticket][:cityTo]]
+          start = g.vertices[params[:ticket][:city_from]]
+          stop  = g.vertices[params[:ticket][:city_to]]
           path = g.shortest_path(start, stop)
           puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
           shortest = Array.new(path.map {|vertex| vertex.name})
@@ -73,7 +73,7 @@ class TicketsController < ApplicationController
           end
         end
       else
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
+      @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ?", Time.now - 30.minutes)
         respond_to do |format|
           format.html # index.html.erb
           format.xml  { render :xml => @tickets }
@@ -87,7 +87,7 @@ class TicketsController < ApplicationController
     logger.debug(arrayOfTrips)
     trips = Array.new()
     arrayOfTrips.collect{ |trip| trips.push(trip.first)} #array of trips which is used to find all trip tickets
-    @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
+    @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
     @tickets = Ticket.where(:trip => trips)
     logger.debug(@tickets.length)
     if((@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0)|| true) #defines how many tickets user can have reserved at once -> default 10 tickets
@@ -101,7 +101,7 @@ class TicketsController < ApplicationController
               tripid = y
             else
               logger.debug("-------")
-              ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND nameOfSeat = ?",tripid,y).first
+              ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND name_of_seat = ?",tripid,y).first
               ticket.user_reserved_id = current_user.id
               ticket.save
             end
@@ -132,9 +132,9 @@ class TicketsController < ApplicationController
 
   def reserve
     logger.debug(params)
-    @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
+    @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
     if(@userTickets.length <= 10)
-      @ticket = Ticket.where("trip = ? AND nameOfSeat = ?", params[:TripID],params[:SeatNumber]).first
+      @ticket = Ticket.where("trip = ? AND name_of_seat = ?", params[:TripID],params[:SeatNumber]).first
       @ticket.user_reserved_id = current_user.id
       @ticket.save
       respond_to do |format|
@@ -148,7 +148,7 @@ class TicketsController < ApplicationController
   end
 
   def unreserve
-    @ticket = Ticket.where("trip = ? AND nameOfSeat = ?", params[:TripID],params[:SeatNumber]).first
+    @ticket = Ticket.where("trip = ? AND name_of_seat = ?", params[:TripID],params[:SeatNumber]).first
     if @ticket.user_reserved_id != current_user.id
       flash[:error] = "You cannot unreserve a ticket which you did not reserve!"
       redirect_to tickets_path
@@ -188,26 +188,26 @@ class TicketsController < ApplicationController
   # POST /tickets.xml
   def create
     error = false
-    startTime = DateTime.new(params[:ticket]["dateOfTrip(1i)"].to_i,
-                             params[:ticket]["dateOfTrip(2i)"].to_i,
-                             params[:ticket]["dateOfTrip(3i)"].to_i,
-                             params[:ticket]["dateOfTrip(4i)"].to_i,
-                             params[:ticket]["dateOfTrip(5i)"].to_i)
+    startTime = DateTime.new(params[:ticket]["date_of_trip(1i)"].to_i,
+                             params[:ticket]["date_of_trip(2i)"].to_i,
+                             params[:ticket]["date_of_trip(3i)"].to_i,
+                             params[:ticket]["date_of_trip(4i)"].to_i,
+                             params[:ticket]["date_of_trip(5i)"].to_i)
     logger.debug(startTime)
-    endTime = DateTime.new(params[:ticket]["endOfTrip(1i)"].to_i,
-                             params[:ticket]["endOfTrip(2i)"].to_i,
-                             params[:ticket]["endOfTrip(3i)"].to_i,
-                             params[:ticket]["endOfTrip(4i)"].to_i,
-                             params[:ticket]["endOfTrip(5i)"].to_i)
+    endTime = DateTime.new(params[:ticket]["end_of_trip(1i)"].to_i,
+                             params[:ticket]["end_of_trip(2i)"].to_i,
+                             params[:ticket]["end_of_trip(3i)"].to_i,
+                             params[:ticket]["end_of_trip(4i)"].to_i,
+                             params[:ticket]["end_of_trip(5i)"].to_i)
     #Find all tickets from 3 days before start of the trip
-    @tickets = Ticket.where("dateOfTrip > ? AND endOfTrip < ? AND bus_id = ? AND endOfTrip > ? AND dateOfTrip < ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id], startTime, endTime)
+    @tickets = Ticket.where("date_of_trip > ? AND end_of_trip < ? AND bus_id = ? AND end_of_trip > ? AND date_of_trip < ?", startTime - 3.days, endTime + 3.days, params[:ticket][:bus_id], startTime, endTime)
     if (endTime > startTime && @tickets.length == 0)
       n = Bus.find(Integer(params[:ticket][:bus_id])).capacity
       m = Ticket.maximum("trip") + 1
       (1..n).each do |i|
         @ticket = current_user.tickets.build(params[:ticket])
         @ticket.user_reserved_id = 0
-        @ticket.nameOfSeat = i
+        @ticket.name_of_seat = i
         @ticket.trip = m
         if !@ticket.save
           respond_to do |format|
@@ -224,7 +224,7 @@ class TicketsController < ApplicationController
       flash[:error] = "You cannot create a ticket which ends sooner than it starts!!!"
       redirect_to new_ticket_path
     elsif(@tickets.length != 0)
-      flash[:error] = "Another ticket exist which collide with the dates. Ticket starting: #{@tickets[0].dateOfTrip} and ending: #{@tickets[0].endOfTrip} "
+      flash[:error] = "Another ticket exist which collide with the dates. Ticket starting: #{@tickets[0].date_of_trip} and ending: #{@tickets[0].end_of_trip} "
       redirect_to new_ticket_path
     else
     end
@@ -260,7 +260,7 @@ class TicketsController < ApplicationController
 
   private
     def sort_column
-      Ticket.column_names.include?(params[:sort]) ? params[:sort] : "dateOfTrip" #Protection against SQL injection (allows only names from column names available for class Ticket)
+      Ticket.column_names.include?(params[:sort]) ? params[:sort] : "date_of_trip" #Protection against SQL injection (allows only names from column names available for class Ticket)
     end
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc" #Protection against SQL injection (allows only ascending and descending orders)

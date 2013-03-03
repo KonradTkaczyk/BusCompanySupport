@@ -2,7 +2,7 @@
 
 <p>
   <b>Name of bus:</b>
-  <%= @bus.nameOfBus %>
+  <%= @bus.name_of_bus %>
 </p>
 
 <p>
@@ -12,7 +12,7 @@
 <%= form_tag(@bus, :method => 'get') do %>
   <div class="field">
     Select date of travel:<br />
-    <%= collection_select :ticket, :id, Ticket.where("bus_id = ?", @bus.id).group("dateOfTrip"),:id,:dateOfTrip %>
+    <%= collection_select :ticket, :id, Ticket.where("bus_id = ?", @bus.id).group("date_of_trip"),:id,:date_of_trip %>
   </div>
   <div class="actions">
     <%= submit_tag "Show" %>
@@ -20,7 +20,7 @@
 <% end %>
 
 <% if @tickets != nil %>
-<b>Listing tickets for bus:</b> <%= @bus.nameOfBus %>
+<b>Listing tickets for bus:</b> <%= @bus.name_of_bus %>
 <%= render 'tickets/buses_index' %>
 <% end %>
 <% if current_user.admin? %>

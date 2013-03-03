@@ -17,8 +17,8 @@ class BusesController < ApplicationController
   def show
     @bus = Bus.find(params[:id])
     if params.has_key?(:ticket)
-      @dateOfTravel = Ticket.where("id = ?",params[:ticket][:id]).first.dateOfTrip
-      @tickets = Ticket.where("bus_id = ? AND dateOfTrip < ? AND dateOfTrip > ?", params[:id], @dateOfTravel + 10.minutes, @dateOfTravel - 10.minutes)
+      @dateOfTravel = Ticket.where("id = ?",params[:ticket][:id]).first.date_of_trip
+      @tickets = Ticket.where("bus_id = ? AND date_of_trip < ? AND date_of_trip > ?", params[:id], @dateOfTravel + 10.minutes, @dateOfTravel - 10.minutes)
     else
       @tickets = nil
     end

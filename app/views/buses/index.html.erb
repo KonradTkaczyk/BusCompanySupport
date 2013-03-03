@@ -11,7 +11,7 @@
 
 <% @buses.each do |bus| %>
   <tr>
-    <td><%= bus.nameOfBus %></td>
+    <td><%= bus.name_of_bus %></td>
     <td><%= bus.capacity %></td>
     <td><%= link_to 'Show', bus %></td>
     <% if current_user.admin? %>

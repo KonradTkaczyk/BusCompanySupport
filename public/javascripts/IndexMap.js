@@ -39,11 +39,11 @@ function init()
 function mapMarkers()
 {
   markers.clearMarkers();
-  var selectBox = document.getElementById('ticket_cityFrom');
+  var selectBox = document.getElementById('ticket_city_from');
   if (selectBox.value == "") return;
   var locationPlace = cities[selectBox.value];
   var location = marker(locationPlace, root + "/images/marker.png");//function to place a marker on map with specific icon.
-  selectBox = document.getElementById('ticket_cityTo');
+  selectBox = document.getElementById('ticket_city_to');
   if (selectBox.value == "") return;
   locationPlace = cities[selectBox.value];
   var location2 = marker(locationPlace, root + "/images/marker2.png");

@@ -1,14 +1,14 @@
 class Ticket < ActiveRecord::Base
 
-attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, :bus_id, :nameOfSeat, :trip, :bought
-  validates :cityFrom,  :presence   => true
-  validates :cityTo,    :presence   => true
-  validates :dateOfTrip,:presence   => true
-  validates :endOfTrip, :presence   => true
-  validates :nameOfSeat,:presence   => true
+attr_accessible :city_from, :city_to, :date_of_trip, :end_of_trip, :user_reserved_id, :bus_id, :name_of_seat, :trip, :bought
+  validates :city_from,  :presence   => true
+  validates :city_to,    :presence   => true
+  validates :date_of_trip,:presence   => true
+  validates :end_of_trip, :presence   => true
+  validates :name_of_seat,:presence   => true
   validates :trip,      :presence   => true
-  validates_datetime :dateOfTrip
-  validates_datetime :endOfTrip
+  validates_datetime :date_of_trip
+  validates_datetime :end_of_trip
   belongs_to :user
   belongs_to :bus
 
@@ -19,7 +19,7 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
 #bus_id - is used to recognize to which bus ticket is connected
 
   def cost_of_trip #Time cost of the trip used to calculate shortest path.
-    (self.endOfTrip - self.dateOfTrip).round
+    (self.end_of_trip - self.date_of_trip).round
   end
 
   def self.tickets_for_shortest_path (shortest)
@@ -27,11 +27,11 @@ attr_accessible :cityFrom, :cityTo, :dateOfTrip, :endOfTrip, :user_reserved_id, 
     endoftrip = Time.now #starting time to search the tickets, then used as variable to find tickets after previous ticket ends so all tickets can line up in time.
     ticketsOfShortestPath = Array.new()
     while !shortest[i+1].nil?
-      ticket2 = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom = ? AND cityTo = ?",endoftrip, shortest[i], shortest[i + 1]).order("dateOfTrip ASC").first
+      ticket2 = Ticket.where("user_reserved_id = 0 AND date_of_trip > ? AND city_from = ? AND city_to = ?",endoftrip, shortest[i], shortest[i + 1]).order("date_of_trip ASC").first
       if (ticket2 == nil)
         return nil
       end
-      endoftrip = ticket2.endOfTrip
+      endoftrip = ticket2.end_of_trip
       @ticket = Ticket.where("user_reserved_id = 0 AND trip = ?",ticket2.trip)#Find all tickets from same trip
       @ticket.each do |x|
         ticketsOfShortestPath.push(x)
@@ -53,11 +53,11 @@ end
 #  updated_at       :datetime
 #  user_id          :integer
 #  user_reserved_id :integer         default(0)
-#  nameOfSeat       :string(255)
+#  name_of_seat       :string(255)
 #  bus_id           :integer
-#  dateOfTrip       :datetime
-#  cityFrom         :string(255)
-#  cityTo           :string(255)
-#  endOfTrip        :datetime
+#  date_of_trip       :datetime
+#  city_from         :string(255)
+#  city_to           :string(255)
+#  end_of_trip        :datetime
 #
 

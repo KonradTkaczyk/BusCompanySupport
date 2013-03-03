@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Ticket do
   before(:each) do
     @user = Factory(:user)
-    @attr = { :nameOfTrip => "City A -> City B", :dateOfTrip => Time.now.to_date, :timeOfTrip => Time.now.to_time }
+    @attr = { :nameOfTrip => "City A -> City B", :date_of_trip => Time.now.to_date, :timeOfTrip => Time.now.to_time }
   end
 
   it "should create a new instance give valid attributes" do
@@ -41,11 +41,11 @@ end
 #  updated_at       :datetime
 #  user_id          :integer
 #  user_reserved_id :integer         default(0)
-#  nameOfSeat       :string(255)
+#  name_of_seat       :string(255)
 #  bus_id           :integer
-#  dateOfTrip       :datetime
-#  cityFrom         :string(255)
-#  cityTo           :string(255)
-#  endOfTrip        :datetime
+#  date_of_trip       :datetime
+#  city_from         :string(255)
+#  city_to           :string(255)
+#  end_of_trip        :datetime
 #
 

@@ -4,10 +4,10 @@ describe "seats/index.html.erb" do
   before(:each) do
     assign(:seats, [
       stub_model(Seat,
-        :nameOfSeat => "Name Of Seat"
+        :name_of_seat => "Name Of Seat"
       ),
       stub_model(Seat,
-        :nameOfSeat => "Name Of Seat"
+        :name_of_seat => "Name Of Seat"
       )
     ])
   end

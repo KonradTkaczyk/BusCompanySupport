@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "buses/show.html.erb" do
   before(:each) do
     @bus = assign(:bus, stub_model(Bus,
-      :nameOfBus => "Name Of Bus",
+      :name_of_bus => "Name Of Bus",
       :travel => "Travel"
     ))
   end

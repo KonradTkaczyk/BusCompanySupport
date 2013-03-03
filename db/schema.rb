@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(:version => 20130210121552) do
 
   create_table "buses", :force => true do |t|
-    t.string   "nameOfBus"
+    t.string   "name_of_bus"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "capacity"
@@ -26,12 +26,12 @@ ActiveRecord::Schema.define(:version => 20130210121552) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "user_reserved_id", :default => 0
-    t.string   "nameOfSeat"
+    t.string   "name_of_seat"
     t.integer  "bus_id"
-    t.datetime "dateOfTrip"
-    t.string   "cityFrom"
-    t.string   "cityTo"
-    t.datetime "endOfTrip"
+    t.datetime "date_of_trip"
+    t.string   "city_from"
+    t.string   "city_to"
+    t.datetime "end_of_trip"
     t.integer  "trip"
     t.boolean  "bought",           :default => false
   end

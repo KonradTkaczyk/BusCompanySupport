@@ -12,28 +12,28 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :dateOfTrip, "Date and time of Trip" %><br />
-    <%= f.datetime_select :dateOfTrip %>
+    <%= f.label :date_of_trip, "Date and time of Trip" %><br />
+    <%= f.datetime_select :date_of_trip %>
   </div>
 
     <div class="field">
-    <%= f.label :endOfTrip, "Date and time ending the Trip" %><br />
-    <%= f.datetime_select(:endOfTrip,:default => 3.hours.from_now) %>
+    <%= f.label :end_of_trip, "Date and time ending the Trip" %><br />
+    <%= f.datetime_select(:end_of_trip,:default => 3.hours.from_now) %>
   </div>
 
   <div class="field">
-    <%= f.label :cityTo, "City to" %> <br />
-    <%= f.text_field :cityTo %>
+    <%= f.label :city_to, "City to" %> <br />
+    <%= f.text_field :city_to %>
   </div>
 
   <div class="field">
-    <%= f.label :cityFrom, "City from" %> <br />
-    <%= f.text_field :cityFrom %>
+    <%= f.label :city_from, "City from" %> <br />
+    <%= f.text_field :city_from %>
   </div>
 
   <div class="field">
     <%= f.label :bus_id, "Name of the bus" %><br />
-    <%= collection_select :ticket, :bus_id ,@Buses,:id,:nameOfBus %>
+    <%= collection_select :ticket, :bus_id ,@Buses,:id,:name_of_bus %>
   </div>
 
 

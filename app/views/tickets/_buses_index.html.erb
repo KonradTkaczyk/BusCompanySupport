@@ -1,9 +1,9 @@
 <table>
   <tr>
-    <th><%= "cityFrom" %></th>
-    <th><%= "cityTo" %></th>
-    <th><%= "dateOfTrip" %></th>
-    <th><%= "endOfTrip" %></th>
+    <th><%= "city_from" %></th>
+    <th><%= "city_to" %></th>
+    <th><%= "date_of_trip" %></th>
+    <th><%= "end_of_trip" %></th>
     <th><%= "bus_id" %></th>
     <th></th>
     <th></th>
@@ -13,13 +13,13 @@
 
 <% @tickets.each do |ticket| %>
   <tr>
-    <td><%= ticket.cityFrom %></td>
-    <td><%= ticket.cityTo %></td>
-    <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+    <td><%= ticket.city_from %></td>
+    <td><%= ticket.city_to %></td>
+    <td><%= ticket.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
+    <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
     <% if ticket.bus_id != nil %>
-    <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
-    <td><%= ticket.nameOfSeat %></td>
+    <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
+    <td><%= ticket.name_of_seat %></td>
     <% end %>
     <% if current_user.admin? %>
       <td><%= link_to 'Show', ticket %></td>

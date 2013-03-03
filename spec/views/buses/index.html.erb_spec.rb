@@ -4,11 +4,11 @@ describe "buses/index.html.erb" do
   before(:each) do
     assign(:buses, [
       stub_model(Bus,
-        :nameOfBus => "Name Of Bus",
+        :name_of_bus => "Name Of Bus",
         :travel => "Travel"
       ),
       stub_model(Bus,
-        :nameOfBus => "Name Of Bus",
+        :name_of_bus => "Name Of Bus",
         :travel => "Travel"
       )
     ])

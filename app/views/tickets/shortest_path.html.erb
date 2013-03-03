@@ -9,10 +9,10 @@
 
 <table id="FoundTickets">
   <tr>
-    <th><%= sortable "cityFrom" %></th>
-    <th><%= sortable "cityTo" %></th>
-    <th><%= sortable "dateOfTrip" %></th>
-    <th><%= sortable "endOfTrip" %></th>
+    <th><%= sortable "city_from" %></th>
+    <th><%= sortable "city_to" %></th>
+    <th><%= sortable "date_of_trip" %></th>
+    <th><%= sortable "end_of_trip" %></th>
     <th><%= sortable "bus_id" %></th>
     <th></th>
     <th></th>
@@ -25,12 +25,12 @@
 <% @tickets.each_cons(2) do |ticket,ticket2| %>
   <% if ticket.trip != ticket2.trip || ticket2.nil?%>
     <tr>
-      <td><%= ticket.cityFrom %></td>
-      <td><%= ticket.cityTo %></td>
-      <td><%= ticket.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <td><%= ticket.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.city_from %></td>
+      <td><%= ticket.city_to %></td>
+      <td><%= ticket.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
       <% if ticket.bus_id != nil %>
-      <td><%= link_to Bus.find(ticket.bus_id).nameOfBus, bus_path(Bus.find(ticket.bus_id))  %></td>
+      <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
       <% end %>
       <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket.trip)} do %> <!-- tag to hold seats that are already reserved -->
       <% end %></td>
@@ -49,14 +49,14 @@
     </tr>
     <% tripTickets.clear %>
   <%elsif ticket.trip != ticket2.trip || ticket2 == @tickets.last%>
-  <%tripTickets.push(ticket2.nameOfSeat.to_i)%>
+  <%tripTickets.push(ticket2.name_of_seat.to_i)%>
   <tr>
-      <td><%= ticket2.cityFrom %></td>
-      <td><%= ticket2.cityTo %></td>
-      <td><%= ticket2.dateOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <td><%= ticket2.endOfTrip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket2.city_from %></td>
+      <td><%= ticket2.city_to %></td>
+      <td><%= ticket2.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket2.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
       <% if ticket2.bus_id != nil %>
-      <td><%= link_to Bus.find(ticket2.bus_id).nameOfBus, bus_path(Bus.find(ticket2.bus_id))  %></td>
+      <td><%= link_to Bus.find(ticket2.bus_id).name_of_bus, bus_path(Bus.find(ticket2.bus_id))  %></td>
       <% end %>
       <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket2.trip)} do %>
       <% end %></td>
@@ -75,9 +75,9 @@
     </tr>
   <% end %>
   <% if ticket == @tickets[0] %>
-    <% tripTickets.push(ticket.nameOfSeat.to_i) %>
+    <% tripTickets.push(ticket.name_of_seat.to_i) %>
   <% end %>
-  <% tripTickets.push(ticket2.nameOfSeat.to_i) %>
+  <% tripTickets.push(ticket2.name_of_seat.to_i) %>
   <% trip = ticket2.trip %>
 <% end %>
 </table>

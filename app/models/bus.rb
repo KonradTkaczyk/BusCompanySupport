@@ -14,7 +14,7 @@ end
 # Table name: buses
 #
 #  id         :integer         not null, primary key
-#  nameOfBus  :string(255)
+#  name_of_bus  :string(255)
 #  created_at :datetime
 #  updated_at :datetime
 #  capacity   :integer

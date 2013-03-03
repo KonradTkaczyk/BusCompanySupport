@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "seats/show.html.erb" do
   before(:each) do
     @seat = assign(:seat, stub_model(Seat,
-      :nameOfSeat => "Name Of Seat"
+      :name_of_seat => "Name Of Seat"
     ))
   end
 
