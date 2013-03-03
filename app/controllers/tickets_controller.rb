@@ -25,7 +25,7 @@ class TicketsController < ApplicationController
   # GET /tickets.xml
   def search
     if(params.has_key?(:ticket))
-      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom LIKE ? AND cityTo LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%")
+      @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ? AND cityFrom ILIKE ? AND cityTo ILIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:cityFrom]}%", "%#{params[:ticket][:cityTo]}%")
       if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
         @tickets = Ticket.where("user_reserved_id = 0 AND dateOfTrip > ?", Time.now - 30.minutes)
       end
