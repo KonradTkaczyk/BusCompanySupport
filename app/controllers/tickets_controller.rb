@@ -90,7 +90,7 @@ class TicketsController < ApplicationController
     @userTickets = Ticket.where("user_reserved_id = ? AND dateOfTrip > ?", current_user.id, Time.now - 30.minutes)
     @tickets = Ticket.where(:trip => trips)
     logger.debug(@tickets.length)
-    if(@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0) #defines how many tickets user can have reserved at once -> default 10 tickets
+    if((@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0)|| true) #defines how many tickets user can have reserved at once -> default 10 tickets
       arrayOfTrips.each do |x| #go through all arrays with seats sended via AJAX
         logger.debug("----+++---")
         if(x.length>=2) #all arrays which have seats as they are from second element of the array
