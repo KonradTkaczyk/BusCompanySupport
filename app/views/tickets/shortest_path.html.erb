@@ -24,55 +24,11 @@
 <% tripTickets = Array.new %> <!-- array of free seats -->
 <% @tickets.each_cons(2) do |ticket,ticket2| %>
   <% if ticket.trip != ticket2.trip || ticket2.nil?%>
-    <tr>
-      <td><%= ticket.city_from %></td>
-      <td><%= ticket.city_to %></td>
-      <td><%= ticket.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <% if ticket.bus_id != nil %>
-      <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
-      <% end %>
-      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket.trip)} do %> <!-- tag to hold seats that are already reserved -->
-      <% end %></td>
-      <% logger.debug(tripTickets)%>
-      <td><div id="holder">
-          <ul  id="place" class="place"> <!-- Place to put seats for reservation -->
-          </ul>
-      </div>
-      <div style="float:left;">
-      <ul id="seatDescription">
-          <li style="background:url('/images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
-          <li style="background:url('/images/reserved_seat_img.gif') no-repeat scroll 0 0 transparent;">Reserved Seat</li>
-          <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
-      </ul>
-      </div>
-    </tr>
+    <%= render :partial => 'shortest_path_row', :locals => {:ticket => ticket, :tripTickets => tripTickets, :seats => seats} %>
     <% tripTickets.clear %>
   <%elsif ticket.trip != ticket2.trip || ticket2 == @tickets.last%>
   <%tripTickets.push(ticket2.name_of_seat.to_i)%>
-  <tr>
-      <td><%= ticket2.city_from %></td>
-      <td><%= ticket2.city_to %></td>
-      <td><%= ticket2.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <td><%= ticket2.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-      <% if ticket2.bus_id != nil %>
-      <td><%= link_to Bus.find(ticket2.bus_id).name_of_bus, bus_path(Bus.find(ticket2.bus_id))  %></td>
-      <% end %>
-      <td><%= content_tag "div", id: "Seat", data:{seats: (seats-tripTickets),tripid:(ticket2.trip)} do %>
-      <% end %></td>
-      <% logger.debug(tripTickets)%>
-      <td><div id="holder">
-          <ul  id="place" class="place"> <!-- Place to put seats for reservation -->
-          </ul>
-      </div>
-      <div style="float:left;">
-      <ul id="seatDescription">
-          <li style="background:url('/images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
-          <li style="background:url('/images/reserved_seat_img.gif') no-repeat scroll 0 0 transparent;">Reserved Seat</li>
-          <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
-      </ul>
-      </div>
-    </tr>
+    <%= render :partial => 'shortest_path_row', :locals => {:ticket => ticket2, :tripTickets => tripTickets, :seats => seats} %>
   <% end %>
   <% if ticket == @tickets[0] %>
     <% tripTickets.push(ticket.name_of_seat.to_i) %>
