@@ -105,6 +105,18 @@ a.register_button
 	font-weight: bold;
 	padding: 20px;
 }
+a.button
+{
+	margin-right: auto;
+	display: block;
+	text-align: left;
+	width: 150px;
+	color: #fff;
+	background: #153E7E;
+	font-size: 100%;
+	font-weight: bold;
+	padding: 10px;
+}
 
 /* Round corners */
 .round
