@@ -91,23 +91,7 @@ class TicketsController < ApplicationController
     @tickets = Ticket.where(:trip => trips)
     logger.debug(@tickets.length)
     if((@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0)|| true) #defines how many tickets user can have reserved at once -> default 10 tickets
-      arrayOfTrips.each do |x| #go through all arrays with seats sended via AJAX
-        logger.debug("----+++---")
-        if(x.length>=2) #all arrays which have seats as they are from second element of the array
-          tripid = nil
-          x.each_with_index do |y,index| #go through all tickets for one trip, first element of array is trip ID
-            if(index == 0)
-              logger.debug("--")
-              tripid = y
-            else
-              logger.debug("-------")
-              ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND name_of_seat = ?",tripid,y).first
-              ticket.user_reserved_id = current_user.id
-              ticket.save
-            end
-          end
-        end
-      end
+      Ticket.reserve_all(arrayOfTrips,current_user)
       #ticket.user_reserved_id = current_user.id
       #ticket.save
       respond_to do |format|

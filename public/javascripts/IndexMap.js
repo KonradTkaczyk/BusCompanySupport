@@ -178,7 +178,6 @@ function events()
 				ReservingTrip.push(tripid);
 				$(row).find('#place li.' + settings.selectingSeatCss + ' a').each(function(i,j)
 				{
-					alert("bla"+i+"ala"+$(j).attr('title')+'tripid:'+tripid);
 					ReservingTrip.push(parseInt($(j).attr('title')));
 				});
 				ArrayOfTrips.push(ReservingTrip);
@@ -197,6 +196,7 @@ function events()
 		    	{
 		    		alert("Tickets reserved!");
 		    		$('table').fadeOut(1000);
+		    		$('#Reserve').fadeOut(1000);
 		    	}
 		    	else
 		    	{

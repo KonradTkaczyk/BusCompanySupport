@@ -40,6 +40,23 @@ attr_accessible :city_from, :city_to, :date_of_trip, :end_of_trip, :user_reserve
     end
     return ticketsOfShortestPath
   end
+
+  def self.reserve_all(arrayOfTrips,current_user)
+    arrayOfTrips.each do |x| #go through all arrays with seats sended via AJAX
+      if(x.length>=2) #all arrays which have seats as they are from second element of the array
+        tripid = nil
+        x.each_with_index do |y,index| #go through all tickets for one trip, first element of array is trip ID
+          if(index == 0)
+            tripid = y
+          else
+            ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND name_of_seat = ?",tripid,y).first
+            ticket.user_reserved_id = current_user.id
+            ticket.save
+          end
+        end
+      end
+    end
+  end
 end
 
 
