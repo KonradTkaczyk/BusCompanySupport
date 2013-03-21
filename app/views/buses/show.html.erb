@@ -12,7 +12,7 @@
 <%= form_tag(@bus, :method => 'get') do %>
   <div class="field">
     Select date of travel:<br />
-    <%= collection_select :ticket, :id, Ticket.where("bus_id = ?", @bus.id).group("date_of_trip"),:id,:date_of_trip %>
+    <%= collection_select :ticket, :id, @dates,:id,:date_of_trip %>
   </div>
   <div class="actions">
     <%= submit_tag "Show" %>

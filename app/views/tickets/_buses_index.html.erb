@@ -1,11 +1,12 @@
 <table>
   <tr>
-    <th><%= "city_from" %></th>
-    <th><%= "city_to" %></th>
-    <th><%= "date_of_trip" %></th>
-    <th><%= "end_of_trip" %></th>
-    <th><%= "bus_id" %></th>
-    <th></th>
+    <th>City From</th>
+    <th>City To</th>
+    <th>Date of trip</th>
+    <th>End of trip</th>
+    <th>Bus</th>
+    <th>Seat Number</th>
+    <th>User name</th>
     <th></th>
     <th></th>
     <th></th>
@@ -21,15 +22,15 @@
     <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
     <td><%= ticket.name_of_seat %></td>
     <% end %>
+    <% if ticket.user_reserved_id != 0 %>
+    <td><%= link_to User.find(ticket.user_reserved_id).name,User.find(ticket.user_reserved_id)  %></td>
+    <% else %>
+    <td>Not reserved</td>
+    <% end %>
     <% if current_user.admin? %>
       <td><%= link_to 'Show', ticket %></td>
       <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
       <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
-    <% end %>
-    <% if ticket.user_reserved_id == 0 %>
-    <td><%= button_to 'Reserve', reserve_ticket_path(ticket), :confirm => "Are you sure, u want to reserve this ticket?", :method => :put%></td>
-    <% else %>
-    <td><%= button_to 'Unreserve', unreserve_ticket_path(ticket), :confirm => "Are you sure, u want to unreserve this ticket?", :method => :put%></td>
     <% end %>
   </tr>
 <% end %>

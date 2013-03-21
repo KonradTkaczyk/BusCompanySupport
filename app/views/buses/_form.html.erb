@@ -14,11 +14,16 @@
   <div class="field">
     <%= f.label :name_of_bus %><br />
     <%= f.text_field :name_of_bus %>
-
+  </div>
    <div class="field">
     <%= f.label :capacity %><br />
     <%= f.text_field :capacity %>
-
+  </div>
+  <div class="field">
+    Select driver:<br />
+    <%= f.label :driver_id %><br />
+    <%= collection_select :user, :driver_id, @drivers,:id,:name %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -2,13 +2,14 @@ namespace :db do
   desc "Fill database with sample data"
   task :populate => :environment do
     Rake::Task['db:reset'].invoke
-    admin = make_users
-    make_buses(admin)
+    drivers = Array.new
+    admin = make_users(drivers)
+    make_buses(admin,drivers)
     make_tickets(admin)
   end
 end
 
-def make_users
+def make_users(drivers)
     admin = User.create!( :name => "Admin",
                   :email => "admin@bcs.org",
                   :password => "foobar",
@@ -33,19 +34,23 @@ def make_users
       name = Faker::Name.name
       email = "example-#{n+1}@bcs.org"
       password = "password"
-      User.create!(:name => name,
+      user = User.create!(:name => name,
                    :email => email,
                    :password => password,
                    :password_confirmation => password,
                    :surname => "user",
                    :postalcode => "00-000")
+      if n.modulo(10) == 0
+        user.toggle!(:driver)
+        drivers.push(user)
+      end
     end
     return admin
 end
 
-def make_buses (admin)
+def make_buses (admin,drivers)
   10.times do |n|
-    admin.buses.create!(:capacity => 10, :name_of_bus => "exampleBus-#{n+1}")
+    admin.buses.create!(:capacity => 10, :name_of_bus => "exampleBus-#{n+1}", :driver_id => drivers[n].id)
   end
 end
 

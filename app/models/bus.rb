@@ -1,4 +1,5 @@
 class Bus < ActiveRecord::Base
+attr_accessible :driver_id
   validates :capacity, :numericality => { :only_integer => true, :greater_than => 0 }
   belongs_to :user
   has_many :tickets

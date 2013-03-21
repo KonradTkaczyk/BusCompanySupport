@@ -16,6 +16,7 @@ class BusesController < ApplicationController
   # GET /buses/1.xml
   def show
     @bus = Bus.find(params[:id])
+    @dates = Ticket.where("bus_id = ?", @bus.id).group("date_of_trip")
     if params.has_key?(:ticket)
       @dateOfTravel = Ticket.where("id = ?",params[:ticket][:id]).first.date_of_trip
       @tickets = Ticket.where("bus_id = ? AND date_of_trip < ? AND date_of_trip > ?", params[:id], @dateOfTravel + 10.minutes, @dateOfTravel - 10.minutes)
@@ -32,7 +33,7 @@ class BusesController < ApplicationController
   # GET /buses/new.xml
   def new
     @bus = Bus.new
-
+    @drivers = User.where("driver = 't'") #find all drivers in Users table
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @bus }
@@ -48,7 +49,8 @@ class BusesController < ApplicationController
   # POST /buses.xml
   def create
     @bus = Bus.new(params[:bus])
-    @bus.created_id = current_user.id
+    @bus.user_id = current_user.id
+    @bus.driver_id = (params[:user][:driver_id])
     respond_to do |format|
       if @bus.save
         format.html { redirect_to(@bus, :notice => 'Bus was successfully created.') }

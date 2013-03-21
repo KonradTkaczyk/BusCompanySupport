@@ -4,6 +4,7 @@
   <tr>
     <th>Name of bus</th>
     <th>Capacity</th>
+    <th>Driver name</th>
     <th></th>
     <th></th>
     <th></th>
@@ -13,6 +14,7 @@
   <tr>
     <td><%= bus.name_of_bus %></td>
     <td><%= bus.capacity %></td>
+    <td><%= link_to 'Driver', user_path(bus.driver_id) %></td>
     <td><%= link_to 'Show', bus %></td>
     <% if current_user.admin? %>
       <td><%= link_to 'Edit', edit_bus_path(bus) %></td>
