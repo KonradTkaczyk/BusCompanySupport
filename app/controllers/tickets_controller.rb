@@ -84,7 +84,6 @@ class TicketsController < ApplicationController
 
   def reserveAll
     arrayOfTrips = JSON.parse(params[:ArrayOfTrips])
-    logger.debug(arrayOfTrips)
     trips = Array.new()
     arrayOfTrips.collect{ |trip| trips.push(trip.first)} #array of trips which is used to find all trip tickets
     @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
@@ -160,6 +159,10 @@ class TicketsController < ApplicationController
         format.xml  { render :xml => @ticket }
       end
     end
+  end
+
+  def bought
+    logger.debug(params)
   end
 
   # GET /tickets/1/edit

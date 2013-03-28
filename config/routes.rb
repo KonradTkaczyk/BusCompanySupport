@@ -3,11 +3,14 @@ BusCompanySupport::Application.routes.draw do
   resources :seats
 
   resources :buses
-
+  namespace :tickets do
+    get 'bought'
+  end
   resources :tickets do
     member do
       get 'reserveAll'
     end
+
   end
   resource :ticket do
     get 'reserved_index'
@@ -16,6 +19,7 @@ BusCompanySupport::Application.routes.draw do
     get 'reserve'
     get 'unreserve'
     get 'reserveAll'
+    get 'bought'
   end
 
   resources :users

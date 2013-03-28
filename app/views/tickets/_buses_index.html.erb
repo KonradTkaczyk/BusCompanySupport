@@ -1,40 +1,36 @@
+<%= form_tag("/tickets/bought", :method => "get", :remote => true) do %>
 <table>
   <tr>
     <th>City From</th>
     <th>City To</th>
     <th>Date of trip</th>
     <th>End of trip</th>
-    <th>Bus</th>
     <th>Seat Number</th>
     <th>User name</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
+  <% @tickets.each do |ticket| %>
+    <tr>
+      <td><%= ticket.city_from %></td>
+      <td><%= ticket.city_to %></td>
+      <td><%= ticket.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
+      <% if ticket.bus_id != nil %>
+      <td><%= ticket.name_of_seat %></td>
+      <% end %>
+      <% if ticket.user_reserved_id != 0 %>
+      <td><%= link_to User.find(ticket.user_reserved_id).name,User.find(ticket.user_reserved_id)  %></td>
+      <% else %>
+      <td>Not reserved</td>
+      <% end %>
+      <td><%= check_box_tag ticket.id,'true'%></td>
 
-<% @tickets.each do |ticket| %>
-  <tr>
-    <td><%= ticket.city_from %></td>
-    <td><%= ticket.city_to %></td>
-    <td><%= ticket.date_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
-    <% if ticket.bus_id != nil %>
-    <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
-    <td><%= ticket.name_of_seat %></td>
-    <% end %>
-    <% if ticket.user_reserved_id != 0 %>
-    <td><%= link_to User.find(ticket.user_reserved_id).name,User.find(ticket.user_reserved_id)  %></td>
-    <% else %>
-    <td>Not reserved</td>
-    <% end %>
-    <% if current_user.admin? %>
-      <td><%= link_to 'Show', ticket %></td>
-      <td><%= link_to 'Edit', edit_ticket_path(ticket) %></td>
-      <td><%= button_to 'Destroy', ticket, :confirm => 'Are you sure?', :method => :delete %></td>
-    <% end %>
-  </tr>
+    </tr>
+  <% end %>
+  </table>
+  <br />
+  <%= submit_tag("Bought",) %>
 <% end %>
-</table>
 <br />
 <%= link_to 'Back', root_path %>
 
