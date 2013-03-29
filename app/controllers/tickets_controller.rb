@@ -162,7 +162,22 @@ class TicketsController < ApplicationController
   end
 
   def bought
-    logger.debug(params)
+    arrayOfTickets = params[:tickets]
+    trips = Array.new()
+    i = 0
+    arrayOfTickets.each do |ticket|
+      @Ticket = Ticket.find(ticket[0])
+      if i < 1
+        trip = Ticket.where("trip = ?",@Ticket.trip)
+        trip.each do |x|
+          x.bought = false
+          x.save
+        end
+        i = 1
+      end
+      @Ticket.bought = true
+      @Ticket.save
+    end
   end
 
   # GET /tickets/1/edit

@@ -23,7 +23,7 @@
       <% else %>
       <td>Not reserved</td>
       <% end %>
-      <td><%= check_box_tag ticket.id,'true'%></td>
+      <td><%= check_box_tag "tickets[#{ticket.id}]",'true', ticket.bought%></td>
 
     </tr>
   <% end %>
