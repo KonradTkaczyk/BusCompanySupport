@@ -4,6 +4,7 @@ class TicketsController < ApplicationController
 
    before_filter :authenticate
    before_filter :admin_user,   :only => [:create, :destroy, :edit, :update]
+   before_filter :driver_user,  :only => [:bought]
 
   def reserved_index
     @tickets = Ticket.where(:user_reserved_id => current_user.id)
@@ -170,7 +171,7 @@ class TicketsController < ApplicationController
       if i < 1
         trip = Ticket.where("trip = ?",@Ticket.trip)
         trip.each do |x|
-          x.bought = false
+          x.bought = false #clear all tickets from the trip to be sure that driver always can refresh information
           x.save
         end
         i = 1
@@ -178,6 +179,8 @@ class TicketsController < ApplicationController
       @Ticket.bought = true
       @Ticket.save
     end
+    flash[:success] = "Users who bought tickets have been registered"
+    redirect_to(buses_path)
   end
 
   # GET /tickets/1/edit
@@ -268,6 +271,9 @@ class TicketsController < ApplicationController
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc" #Protection against SQL injection (allows only ascending and descending orders)
     end
     def admin_user
+      redirect_to(root_path) unless current_user.admin?
+    end
+    def driver_user
       redirect_to(root_path) unless current_user.admin?
     end
 end

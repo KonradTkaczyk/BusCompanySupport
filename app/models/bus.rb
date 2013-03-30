@@ -1,14 +1,11 @@
 class Bus < ActiveRecord::Base
-attr_accessible :driver_id
+attr_accessible :driver_id, :capacity, :name_of_bus
   validates :capacity, :numericality => { :only_integer => true, :greater_than => 0 }
   belongs_to :user
   has_many :tickets
 end
 #user_id - informs who created a bus
 #driver_id - informs who is a driver of the bus_id
-
-
-
 
 # == Schema Information
 #

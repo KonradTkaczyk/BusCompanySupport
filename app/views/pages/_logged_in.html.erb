@@ -1,5 +1,7 @@
 <% if current_user.admin? %>
   <%= render 'pages/admin' %>
+<% elsif current_user.driver? %>
+  <%= render 'pages/driver' %>
 <% else %>
   <%= render 'pages/customer' %>
 <% end %>
