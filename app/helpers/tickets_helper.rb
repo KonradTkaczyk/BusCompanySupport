@@ -8,6 +8,7 @@ module TicketsHelper
     end
 
     def initialize(graph)
+      #Rails.logger = Logger.new(STDOUT)
       @vertices = {}
       @edges = []
       graph.each do |(v1, v2, dist)|
@@ -17,6 +18,8 @@ module TicketsHelper
         vert2 = @vertices[v2]
         vert1.neighbours << vert2
         vert2.neighbours << vert1
+        #Rails.logger.debug(vert1)
+        #Rails.logger.debug(vert2)
         @edges << Edge.new(vert1, vert2, dist)
       end
       @dijkstra_source = nil
@@ -24,6 +27,9 @@ module TicketsHelper
     attr_reader :vertices, :edges
 
     def edge(u, v)
+      Rails.logger = Logger.new(STDOUT)
+      Rails.logger.debug(u)
+      Rails.logger.debug(v)
       @edges.find {|e| e.vertices == [u, v] or e.vertices == [v, u]}
     end
 

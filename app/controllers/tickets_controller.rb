@@ -115,7 +115,6 @@ class TicketsController < ApplicationController
   end
 
   def reserve
-    logger.debug(params)
     @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
     if(@userTickets.length <= 10)
       @ticket = Ticket.where("trip = ? AND name_of_seat = ?", params[:TripID],params[:SeatNumber]).first
