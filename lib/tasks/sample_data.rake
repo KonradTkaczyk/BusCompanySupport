@@ -10,25 +10,29 @@ namespace :db do
 end
 
 def make_users(drivers)
+  @genders = [true,false]#true - man, false - woman
     admin = User.create!( :name => "Admin",
                   :email => "admin@bcs.org",
                   :password => "foobar",
                   :password_confirmation => "foobar",
                   :surname => "Admin",
-                  :postalcode => "00-000")
+                  :postalcode => "00-000",
+                  :gender => @genders.rand)
     admin.toggle!(:admin)
     User.create!( :name => "Example User",
               :email => "user@bcs.org",
               :password => "foobar",
               :password_confirmation => "foobar",
               :surname => "user",
-              :postalcode => "00-000")
+              :postalcode => "00-000",
+              :gender => @genders.rand)
     driver = User.create!( :name => "Driver",
               :email => "driver@bcs.org",
               :password => "foobar",
               :password_confirmation => "foobar",
               :surname => "user",
-              :postalcode => "00-000")
+              :postalcode => "00-000",
+              :gender => @genders.rand)
     driver.toggle!(:driver)
     99.times do |n|
       name = Faker::Name.name
@@ -39,7 +43,8 @@ def make_users(drivers)
                    :password => password,
                    :password_confirmation => password,
                    :surname => "user",
-                   :postalcode => "00-000")
+                   :postalcode => "00-000",
+                   :gender => @genders.rand)
       if n.modulo(10) == 0 #each 10th user becomes driver
         user.toggle!(:driver)
         drivers.push(user)

@@ -1,5 +1,45 @@
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "highcharts.js" %>
+<% end %>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    new Highcharts.Chart({
+      chart: {
+        renderTo: "users_chart",
+        plotBackgroundColor: "#BDEDFF",
+        type: "pie"
+      },
+      title: {
+        text: "Users"
+      },
+      tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+            	percentageDecimals: 1
+      },
+      plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                        }
+                    }
+                }
+            },
+        series: [{
+            type: 'pie',
+            name: 'Browser share',
+            data:  <%= raw User.users_gender_stats %>
+        }]
+    });
+  });
+</script>
 <h1>All users </h1>
-
+<div id="users_chart" style="width:560px; height:300px;"></div>
 <%= will_paginate %>
 
 <ul class="users">
