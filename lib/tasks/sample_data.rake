@@ -17,7 +17,8 @@ def make_users(drivers)
                   :password_confirmation => "foobar",
                   :surname => "Admin",
                   :postalcode => "00-000",
-                  :gender => @genders.rand)
+                  :gender => @genders.rand,
+                  :birthday => Array(Date.new(1920,1,1)..Date.new(2000,1,1)).sample)
     admin.toggle!(:admin)
     User.create!( :name => "Example User",
               :email => "user@bcs.org",
@@ -25,14 +26,16 @@ def make_users(drivers)
               :password_confirmation => "foobar",
               :surname => "user",
               :postalcode => "00-000",
-              :gender => @genders.rand)
+              :gender => @genders.rand,
+              :birthday => Array(Date.new(1920,1,1)..Date.new(2000,1,1)).sample)
     driver = User.create!( :name => "Driver",
               :email => "driver@bcs.org",
               :password => "foobar",
               :password_confirmation => "foobar",
               :surname => "user",
               :postalcode => "00-000",
-              :gender => @genders.rand)
+              :gender => @genders.rand,
+              :birthday => Array(Date.new(1920,1,1)..Date.new(2000,1,1)).sample)
     driver.toggle!(:driver)
     99.times do |n|
       name = Faker::Name.name
@@ -44,7 +47,8 @@ def make_users(drivers)
                    :password_confirmation => password,
                    :surname => "user",
                    :postalcode => "00-000",
-                   :gender => @genders.rand)
+                   :gender => @genders.rand,
+                   :birthday => Array(Date.new(1920,1,1)..Date.new(2000,1,1)).sample)
       if n.modulo(10) == 0 #each 10th user becomes driver
         user.toggle!(:driver)
         drivers.push(user)

@@ -7,14 +7,14 @@
       chart: {
         renderTo: "users_chart",
         plotBackgroundColor: "#BDEDFF",
-        type: "pie"
       },
       title: {
         text: "Users"
       },
       tooltip: {
-        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
-            	percentageDecimals: 1
+            	formatter: function() {
+    return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 2) +' %' + '<br/ >' + '<b>'+ this.point.name +'</b>: ' + this.point.y ;
+}
       },
       plotOptions: {
                 pie: {
@@ -25,14 +25,16 @@
                         color: '#000000',
                         connectorColor: '#000000',
                         formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                            return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 2) +' %';
                         }
-                    }
-                }
+                    },
+                    showInLegend: true
+                },
+
             },
         series: [{
             type: 'pie',
-            name: 'Browser share',
+            name: 'Users',
             data:  <%= raw User.users_gender_stats %>
         }]
     });

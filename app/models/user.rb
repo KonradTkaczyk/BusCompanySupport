@@ -48,10 +48,8 @@ class User < ActiveRecord::Base
 
   def self.users_gender_stats
     stats = Array.new
-    stat =
-    stats.push(Array.new(['females',User.where(:gender => false).count]))
-    stats.push(Array.new(['males',User.where(:gender => true).count]))
-    logger.debug(stats)
+    stats.push(Array.new(['Females',User.where(:gender => false).count]))
+    stats.push(Array.new(['Males',User.where(:gender => true).count]))
     return stats
   end
 
