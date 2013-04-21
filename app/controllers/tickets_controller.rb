@@ -89,18 +89,9 @@ class TicketsController < ApplicationController
     arrayOfTrips.collect{ |trip| trips.push(trip.first)} #array of trips which is used to find all trip tickets
     @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
     @tickets = Ticket.where(:trip => trips)
-    logger.debug(@tickets.length)
-    if((@userTickets.length <= 50 && 50 - @userTickets.length - @tickets.length >= 0)|| true) #defines how many tickets user can have reserved at once -> default 10 tickets
-      Ticket.reserve_all(arrayOfTrips,current_user)
-      #ticket.user_reserved_id = current_user.id
-      #ticket.save
-      respond_to do |format|
-        format.json { render :json => { :result => 'success'} }
-      end
-    else
-      respond_to do |format|
-        format.json { render :json => { :result => 'failure'} }
-      end
+    Ticket.reserve_all(arrayOfTrips,current_user)
+    respond_to do |format|
+      format.json { render :json => { :result => 'success'} }
     end
   end
   # GET /tickets/1
