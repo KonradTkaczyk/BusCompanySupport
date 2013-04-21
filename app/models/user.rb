@@ -53,6 +53,17 @@ class User < ActiveRecord::Base
     return stats
   end
 
+  def self.users_age_stats
+    stats = Array.new
+    stats.push(Array.new(['0-18',User.where("birthday > ? AND birthday < ?",Time.now - 18.years,Time.now).count]))
+    stats.push(Array.new(['18-30',User.where("birthday > ? AND birthday < ?",Time.now - 30.years,Time.now - 18.years).count]))
+    stats.push(Array.new(['31-40',User.where("birthday > ? AND birthday < ?",Time.now - 40.years,Time.now - 30.years).count]))
+    stats.push(Array.new(['41-50',User.where("birthday > ? AND birthday < ?",Time.now - 50.years,Time.now - 40.years).count]))
+    stats.push(Array.new(['51-65',User.where("birthday > ? AND birthday < ?",Time.now - 65.years,Time.now - 50.years).count]))
+    stats.push(Array.new(['65+',User.where("birthday < ?",Time.now - 65.years).count]))
+    return stats
+  end
+
   private
 
     def encrypt_password

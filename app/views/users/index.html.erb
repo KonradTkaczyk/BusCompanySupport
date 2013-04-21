@@ -5,7 +5,7 @@
   $(function() {
     new Highcharts.Chart({
       chart: {
-        renderTo: "users_chart",
+        renderTo: "users_gender_chart",
         plotBackgroundColor: "#BDEDFF",
       },
       title: {
@@ -34,14 +34,75 @@
             },
         series: [{
             type: 'pie',
-            name: 'Users',
+            name: 'Users gender',
             data:  <%= raw User.users_gender_stats %>
         }]
     });
+        new Highcharts.Chart({
+      chart: {
+        renderTo: "users_age_chart",
+        plotBackgroundColor: "#BDEDFF",
+      },
+      title: {
+        text: "Users"
+      },
+      tooltip: {
+            	formatter: function() {
+    return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 2) +' %' + '<br/ >' + '<b>'+ this.point.name +'</b>: ' + this.point.y ;
+}
+      },
+      plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 2) +' %';
+                        }
+                    },
+                    showInLegend: true
+                },
+
+            },
+        series: [{
+            type: 'pie',
+            name: 'Users age',
+            data:  <%= raw User.users_age_stats %>
+        }]
+    });
+    $("#gender").click(function()
+    {
+      if ($("#gender").is(':checked'))
+      {
+        $("#users_gender_chart").show();
+      }
+      else
+      {
+        $("#users_gender_chart").hide();
+      }
+    });
+    $("#age").click(function()
+    {
+      if ($("#age").is(':checked'))
+      {
+        $("#users_age_chart").show();
+      }
+      else
+      {
+        $("#users_age_chart").hide();
+      }
+    });
   });
+
+
 </script>
 <h1>All users </h1>
-<div id="users_chart" style="width:560px; height:300px;"></div>
+<div>Gender <%= check_box_tag 'gender','gender', true%> Age <%= check_box_tag 'age','age', true%></div>
+<div id="users_gender_chart" style="width:560px; height:300px;"></div>
+<div id="users_age_chart" style="width:560px; height:300px;"></div>
 <%= will_paginate %>
 
 <ul class="users">
