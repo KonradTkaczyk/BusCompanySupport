@@ -28,10 +28,12 @@
         <td><%= ticket.end_of_trip.strftime("%A %d-%m-%Y %H:%M") %></td>
         <% if ticket.bus_id != nil %>
         <td><%= link_to Bus.find(ticket.bus_id).name_of_bus, bus_path(Bus.find(ticket.bus_id))  %></td>
-        <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
-          <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
-          <%= hidden_field_tag "TripID", ticket.trip %></td>
-        <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+          <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
+            <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
+            <%= hidden_field_tag "TripID", ticket.trip %></td>
+            <% if ticket.date_of_trip > Time.now %>
+              <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+            <% end %>
           <% end %>
         <% end %>
       </tr>
@@ -48,7 +50,9 @@
         <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
           <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
           <%= hidden_field_tag "TripID", ticket2.trip %></td>
-        <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+          <% if ticket2.date_of_trip > Time.now %>
+          <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+            <% end %>
           <% end %>
         <% end %>
       </tr>
@@ -69,7 +73,9 @@
       <td><%= form_tag url_for(:controller => 'tickets', :action => 'unreserve'), :method => 'get' do %>
         <%= select_tag("SeatNumber", options_for_select(tripTickets.collect{ |u| [u] })) %>
         <%= hidden_field_tag "TripID", ticket.trip %></td>
-      <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+        <% if ticket.date_of_trip > Time.now %>
+          <td><%= submit_tag "Unreserve", :action => 'unreserve', :controller => 'tickets'%></td>
+          <% end %>
         <% end %>
       <% end %>
     </tr>
