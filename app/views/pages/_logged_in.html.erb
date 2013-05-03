@@ -6,7 +6,9 @@
   <%= render 'pages/customer' %>
 <% end %>
 <%= link_to "List of Tickets", tickets_path, :class => "button round"%><br />
+<% if current_user.driver? || current_user.admin?%>
 <%= link_to "List of Buses", buses_path, :class => "button round"%><br />
+<% end %>
 <%= link_to "List of my Tickets", reserved_index_ticket_path, :class => "button round"%><br />
 <%= link_to "Search", search_ticket_path, :class => "button round"%>
 
