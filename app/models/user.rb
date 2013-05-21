@@ -13,6 +13,10 @@ class User < ActiveRecord::Base
   validates :name,      :presence   => true,
                         :length     => { :maximum => 50 }
 
+  validates :address,   :length     => { :maximum => 50 }
+
+  validates :city,      :length     => { :maximum => 50 }
+
   validates :email,     :presence   => true,
                         :format     => { :with => email_regex },
                         :uniqueness => { :case_sensitive => false }
