@@ -16,6 +16,9 @@
     Select city in which trip ends:<br />
     <%= collection_select :ticket, :city_to, Ticket.find(:all, :select => "DISTINCT city_to", :order => "city_to"),:city_to,:city_to,{:prompt => true},{:onchange=>"mapMarkers();"} %>
     </div>
+    <div class="date">
+    <%= datetime_select :ticket, :date_of_trip %>
+    </div>
     <div class="actions">
       <%= submit_tag "Search", :name => nil %>
     </div>

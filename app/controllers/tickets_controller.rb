@@ -26,9 +26,14 @@ class TicketsController < ApplicationController
   # GET /tickets.xml
   def search
     if(params.has_key?(:ticket))
+      startTime = DateTime.new(params[:ticket]["date_of_trip(1i)"].to_i,
+                             params[:ticket]["date_of_trip(2i)"].to_i,
+                             params[:ticket]["date_of_trip(3i)"].to_i,
+                             params[:ticket]["date_of_trip(4i)"].to_i,
+                             params[:ticket]["date_of_trip(5i)"].to_i)
       @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ? AND city_from LIKE ? AND city_to LIKE ?", Time.now - 30.minutes, "%#{params[:ticket][:city_from]}%", "%#{params[:ticket][:city_to]}%")
       if @tickets.length == 0 # if no direct connection found then search for closest path to reach the destination.
-        @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ?", Time.now - 30.minutes)
+        @tickets = Ticket.where("user_reserved_id = 0 AND date_of_trip > ?", startTime)
       end
       if @tickets.length != 0
         array = Array.new()
@@ -57,7 +62,7 @@ class TicketsController < ApplicationController
           path = g.shortest_path(start, stop)
           puts "shortest path from #{start.name} to #{stop.name} has cost #{Time.at(stop.dist).gmtime.strftime('%R:%S')}:"
           shortest = Array.new(path.map {|vertex| vertex.name})
-          @tickets = Ticket.tickets_for_shortest_path(shortest)
+          @tickets = Ticket.tickets_for_shortest_path(shortest, startTime)
           if @tickets == nil
             flash[:error] = "No route has been found"
             respond_to do |format|
