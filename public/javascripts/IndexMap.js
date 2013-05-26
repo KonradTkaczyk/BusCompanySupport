@@ -192,15 +192,15 @@ function events()
 		    success: function(response)
 		    {
 					text = JSON.stringify(response);
-		    	if(text.indexOf("success") >= 0)
+		    	if(response.result > 0)
 		    	{
-		    		alert("Tickets reserved!");
+		    		alert(response.result + " ticket(s) reserved!");
 		    		$('table').fadeOut(1000);
 		    		$('#Reserve').fadeOut(1000);
 		    	}
 		    	else
 		    	{
-		    		alert("Failed to reserve tickets!");
+		    		alert("Failed to reserve any ticket!");
 		    	}
 		    },
 		    failure: function() { alert("Failure!"); }

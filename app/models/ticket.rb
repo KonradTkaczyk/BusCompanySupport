@@ -42,6 +42,7 @@ attr_accessible :city_from, :city_to, :date_of_trip, :end_of_trip, :user_reserve
   end
 
   def self.reserve_all(arrayOfTrips,current_user)
+    how_many_tickets_reserved = 0
     arrayOfTrips.each do |x| #go through all arrays with seats sended via AJAX
       if(x.length>=2) #all arrays which have seats as they are from second element of the array
         tripid = nil
@@ -51,11 +52,14 @@ attr_accessible :city_from, :city_to, :date_of_trip, :end_of_trip, :user_reserve
           else
             ticket = Ticket.where("user_reserved_id = 0 AND trip = ? AND name_of_seat = ?",tripid,y).first
             ticket.user_reserved_id = current_user.id
-            ticket.save
+            if ticket.save
+              how_many_tickets_reserved = how_many_tickets_reserved + 1
+            end
           end
         end
       end
     end
+    return how_many_tickets_reserved
   end
 end
 

@@ -94,9 +94,9 @@ class TicketsController < ApplicationController
     arrayOfTrips.collect{ |trip| trips.push(trip.first)} #array of trips which is used to find all trip tickets
     @userTickets = Ticket.where("user_reserved_id = ? AND date_of_trip > ?", current_user.id, Time.now - 30.minutes)
     @tickets = Ticket.where(:trip => trips)
-    Ticket.reserve_all(arrayOfTrips,current_user)
+    how_many_tickets_reserved = Ticket.reserve_all(arrayOfTrips,current_user)
     respond_to do |format|
-      format.json { render :json => { :result => 'success'} }
+      format.json { render :json => { :result => how_many_tickets_reserved} }
     end
   end
   # GET /tickets/1
