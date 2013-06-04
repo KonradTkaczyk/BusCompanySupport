@@ -74,6 +74,7 @@ def make_tickets (admin)
   $trip = 1
   time = Time.now
   10.times do |m|
+     # user,how many days,city_from,city_to,bus_id,time, how many hours from "time" to start, how many hours from "time" to end
      make_10_tickets(admin,m,"Warsaw","Ciechanow",1,time,0,2)
      make_10_tickets(admin,m,"Ciechanow","Warsaw",1,time,2,4)
      make_10_tickets(admin,m,"Ciechanow","Gdansk",2,time,4,8)
