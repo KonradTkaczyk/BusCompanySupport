@@ -19,9 +19,11 @@ group :development do
 end
 
 group :test do
+  gem "watir", "~>4.0"
   gem 'rspec', '2.0.1'
   gem 'webrat', '0.7.1'
   gem 'factory_girl_rails', '1.0'
+  gem 'watir-webdriver-rails'
 end
 # Use unicorn as the web server
 # gem 'unicorn'

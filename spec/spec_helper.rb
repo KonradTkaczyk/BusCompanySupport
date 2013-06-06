@@ -2,6 +2,11 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'watir-webdriver-rails'
+
+WatirWebdriverRails.host = "localhost"
+WatirWebdriverRails.port = 57124
+WatirWebdriverRails.close_browser_after_finish = true
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
