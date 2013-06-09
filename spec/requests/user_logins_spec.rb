@@ -42,6 +42,11 @@ describe "Test the user functionalities" do
       browser.text.should include('Search')
       browser.text.should_not include('List of Buses')
     end
+
+    it "should allow to see all tickets" do
+
+    end
+
     it "should allow to see all tickets" do
 
     end
