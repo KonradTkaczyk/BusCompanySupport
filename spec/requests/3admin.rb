@@ -83,8 +83,18 @@ describe "Test the admin functionalities" do
 	describe "Controlling of users by admin" do
 		it "should be possible to delete newly created user" do
 			browser.link(:href => "/users").click
-			browser.link(:href => "/users?page=4").click
-			browser.link(:title => "Delete Jan").click
+			begin
+				if browser.link(:title => "Delete Jan").exist?
+					browser.link(:title => "Delete Jan").flash
+					sleep 5
+					browser.link(:title => "Delete Jan").click
+					break
+				end
+				browser.link(:class => "next_page").flash
+				sleep 2
+				browser.link(:class => "next_page").click
+			end while not browser.link(:class => "next_page disabled").exist?
+			#browser.link(:title => "Delete Jan").click
 			if 'Are You sure do You want to delete?' == browser.alert.text
 				browser.alert.ok
 			end
