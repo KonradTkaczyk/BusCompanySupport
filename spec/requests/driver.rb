@@ -28,5 +28,16 @@ describe "Test the driver functionalities" do
 			browser.text.should include('List of Buses')
 		end
 	end
+	describe "Driver checking functionality" do
+		it "should be possible to open list of passengers" do
+			browser.link(:href => "/buses").click
+			browser.link(:href => "/buses/1").click
+			browser.button(:value => 'Show').click
+			browser.text.should_not include('Gdansk')
+			browser.text.should include('Warsaw')
+			browser.text.should include('Ciechanow')
+			browser.button(:value => 'Bought').exist?.should == true
+		end
+	end
 end
 

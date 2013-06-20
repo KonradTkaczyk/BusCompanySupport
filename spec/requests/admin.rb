@@ -57,10 +57,6 @@ describe "Test new user registration" do
 		browser.text.should include('Password doesn\'t match confirmation')
 		browser.text.should include('Postalcode should be in format xx-xxx, where x is digit')
 	end
-
-	# browser.text_field(:name => 'session[email]').set("user@bcs.org")
-	# browser.text_field(:name => 'session[password]').set("foobar")
-
 end
 
 describe "Test the admin functionalities" do
@@ -85,16 +81,11 @@ describe "Test the admin functionalities" do
 			browser.link(:href => "/users").click
 			begin
 				if browser.link(:title => "Delete Jan").exist?
-					browser.link(:title => "Delete Jan").flash
-					sleep 5
 					browser.link(:title => "Delete Jan").click
 					break
 				end
-				browser.link(:class => "next_page").flash
-				sleep 2
 				browser.link(:class => "next_page").click
 			end while not browser.link(:class => "next_page disabled").exist?
-			#browser.link(:title => "Delete Jan").click
 			if 'Are You sure do You want to delete?' == browser.alert.text
 				browser.alert.ok
 			end
