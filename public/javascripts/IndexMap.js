@@ -12,6 +12,7 @@
   cities['Rzeszow'] = "50.033611, 22.004722";
   cities['Lublin'] = "51.248056, 22.570278";
   cities['Warsaw'] = "52.232222, 21.008333";
+  cities['Elblag'] = "54.158333, 19.402778";
   var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
   var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
   var root = location.protocol + '//' + location.host;

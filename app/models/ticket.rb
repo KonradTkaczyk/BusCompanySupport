@@ -27,7 +27,7 @@ attr_accessible :city_from, :city_to, :date_of_trip, :end_of_trip, :user_reserve
     endoftrip = date_of_trip #starting time to search the tickets, then used as variable to find tickets after previous ticket ends so all tickets can line up in time.
     ticketsOfShortestPath = Array.new()
     while !shortest[i+1].nil?
-      ticket2 = Ticket.where("user_reserved_id = 0 AND date_of_trip > ? AND city_from = ? AND city_to = ?",endoftrip, shortest[i], shortest[i + 1]).order("date_of_trip ASC").first
+      ticket2 = Ticket.where("user_reserved_id = 0 AND date_of_trip >= ? AND city_from = ? AND city_to = ?",endoftrip, shortest[i], shortest[i + 1]).order("date_of_trip ASC").first
       if (ticket2 == nil)
         return nil
       end
