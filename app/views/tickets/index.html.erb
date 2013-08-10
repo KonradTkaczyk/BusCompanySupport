@@ -1,9 +1,5 @@
-
+<% if current_user.admin? %>
+  <%= button_to 'New Ticket', new_ticket_path, :method => :get %>
+<% end %>
 <%= render 'index' %>
-<table>
-  <th><% if current_user.admin? %>
-    <%= link_to 'New Ticket', new_ticket_path %>
-  <% end %></th>
-  <th><%= link_to 'Back', root_path %></th>
-</table>
 
