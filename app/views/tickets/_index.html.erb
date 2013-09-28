@@ -23,7 +23,7 @@
     %>
   <% end %>
   <%
-    if ticket.trip != ticket2.trip && ticket2 == @tickets[@tickets.count-1]
+    if ticket.trip == ticket2.trip && ticket2 == @tickets[@tickets.count-1]
     tripTickets.push(ticket2.name_of_seat.to_i)
   %>
   <%= render :partial => 'index_row', :locals => {:ticket => ticket2, :tripTickets => tripTickets} %>
