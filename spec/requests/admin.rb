@@ -33,7 +33,7 @@ describe "Test new user registration" do
 		browser.text_field(:name => 'user[password_confirmation]').when_present.set("foobar")
 		browser.button(:value => 'Register').when_present.click
 		browser.text.should include('Welcome to the BusCompanySupport!')
-		browser.text.should include('List of my Tickets')
+		browser.text.should include('List of user tickets')
 	end
 	it "should not allow to register this user" do
 		browser.goto link_to_BCS + '/register'
@@ -89,7 +89,8 @@ describe "Test the admin functionalities" do
 			if 'Are You sure do You want to delete?' == browser.alert.text
 				browser.alert.ok
 			end
-			browser.text.should include('User destroyed.')
+			browser.div(:class => "flash success").wait_until_present
+			browser.text.should include("User destroyed.")
 		end
 	end
 end
