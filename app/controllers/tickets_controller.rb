@@ -7,7 +7,11 @@ class TicketsController < ApplicationController
    before_filter :driver_user,  :only => [:bought]
 
   def reserved_index
-    @tickets = Ticket.where(:user_reserved_id => params[:user_id])
+    if params[:user_id] != nil && current_user.admin?
+      @tickets = Ticket.where(:user_reserved_id => params[:user_id])
+    else
+      @tickets = Ticket.where(:user_reserved_id => current_user.id)
+    end
     respond_to do |format|
       format.html # reserved_index.html.erb
       format.xml  { render :xml => @tickets }
